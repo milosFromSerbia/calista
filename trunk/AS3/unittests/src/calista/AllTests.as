@@ -10,7 +10,7 @@
   WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
   for the specific language governing rights and limitations under the License. 
   
-  The Original Code is VEGAS Framework.
+  The Original Code is CalistA Framework.
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <vegas@ekameleon.net>.
@@ -22,22 +22,22 @@
 */
 package calista  
 {
-	import buRRRn.ASTUce.framework.ITest;
-	import buRRRn.ASTUce.framework.TestSuite;
-	
-	import calista.hash.AllTests;	
+    import buRRRn.ASTUce.framework.ITest;
+    import buRRRn.ASTUce.framework.TestSuite;
+    
+    import calista.hash.AllTests;    
     import calista.util.AllTests;
     
-	/**
-	 * This class launch all tests.
-	 * @author eKameleon
-	 */
-	public class AllTests
-	{
-		
+    /**
+     * This class launch all tests.
+     * @author eKameleon
+     */
+    public class AllTests
+    {
+        
         /**
          * Creates the Test list.
-         */		
+         */        
         public static function suite():ITest
         {
             var suite:TestSuite = new TestSuite( "calista" );
@@ -47,6 +47,6 @@ package calista
             
             return suite;
         }
-	}
+    }
 }
 
