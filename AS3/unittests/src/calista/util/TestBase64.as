@@ -10,11 +10,11 @@
   WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
   for the specific language governing rights and limitations under the License. 
   
-  The Original Code is VEGAS Framework.
+  The Original Code is CalistA Framework.
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <vegas@ekameleon.net>.
-  Portions created by the Initial Developer are Copyright (C) 2004-2008
+  Portions created by the Initial Developer are Copyright (C) 2004-2009
   the Initial Developer. All Rights Reserved.
   
   Contributor(s) :
@@ -24,7 +24,7 @@ package calista.util
 {
     import buRRRn.ASTUce.framework.TestCase;
     
-    import calista.util.Base64;	
+    import calista.util.Base64;    
 
     /**
      * This class test the Base64 class.
@@ -47,9 +47,9 @@ package calista.util
             
         public function testEncode():void
         {
-	 	 	var encode:String = Base64.encode( "hello world with a base 64 algorithm" ) ;
-	 	 	assertEquals( encode ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" , "The encode method failed." ) ;
-		}
+            var encode:String = Base64.encode( "hello world with a base 64 algorithm" ) ;
+            assertEquals( encode ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" , "The encode method failed." ) ;
+        }
         
 
     }

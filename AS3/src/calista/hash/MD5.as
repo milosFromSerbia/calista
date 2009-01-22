@@ -14,7 +14,7 @@
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <ekameleon@gmail.com>.
-  Portions created by the Initial Developer are Copyright (C) 2004-2008
+  Portions created by the Initial Developer are Copyright (C) 2004-2009
   the Initial Developer. All Rights Reserved.
   
   Contributor(s) :
@@ -24,7 +24,7 @@ package calista.hash
 {
 
     /**
-      * Encrypt a string with the MD5 algorithm.
+     * Encrypt a string with the MD5 algorithm.
      * <p><b>Example :</b></p>
      * <pre class="prettyprint">
      * import calista.hash.MD5 ;
@@ -42,7 +42,6 @@ package calista.hash
      * Version 2.1 Copyright Paul Johnston 1999 - 2002
      * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
       * See http://pajhome.org.uk/crypt/md5 for more info.
-     * @author eKameleon
      */
     public class MD5 
     {
