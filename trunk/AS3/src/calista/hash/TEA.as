@@ -14,7 +14,7 @@
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <ekameleon@gmail.com>.
-  Portions created by the Initial Developer are Copyright (C) 2004-2009
+  Portions created by the Initial Developer are Copyright (C) 2004-2010
   the Initial Developer. All Rights Reserved.
   
   Contributor(s) :
@@ -45,7 +45,6 @@ package calista.hash
      */
     public class TEA 
     {
-        
         /**
          * Uses corrected Block TEA to encrypt a string value using key.
          * <pre class="prettyprint">
@@ -64,7 +63,7 @@ package calista.hash
         {
             var v:Array = charsToLongs(strToChars(src)) ;
             var k:Array = charsToLongs(strToChars(key)) ;
-            var n:Number = v.length ;
+            var n:int = v.length ;
             if (n == 0) 
             {
                 return "" ;
@@ -155,7 +154,7 @@ package calista.hash
         {  
             var size:Number = Math.ceil( chars.length/4 ) ;
             var ar:Array    = new Array(size);
-            for (var i:Number = 0 ; i<size ; i++) 
+            for (var i:int ; i<size ; i++) 
             {
                 ar[i] = chars[i*4] + (chars[i*4+1]<<8) + (chars[i*4+2]<<16) + (chars[i*4+3]<<24);
             }
@@ -170,8 +169,8 @@ package calista.hash
         {
             var result:String = new String("") ;
             var hex:Array   = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"] ;
-            var size:Number = chars.length ;
-            for (var i:Number = 0; i<size ; i++) 
+            var size:int = chars.length ;
+            for (var i:int ; i<size ; i++) 
             {
                 result += hex[chars[i] >> 4] + hex[chars[i] & 0xf] ;
             }
@@ -186,8 +185,8 @@ package calista.hash
         private static function charsToStr(chars:Array):String 
         {
             var result:String = new String("") ;
-            var size:Number   = chars.length ;
-            for ( var i:Number = 0 ; i<size ; i++ ) 
+            var size:int = chars.length ;
+            for ( var i:int ; i<size ; i++ ) 
             {
                 result += String.fromCharCode( chars[i] ) ;
             }
@@ -201,41 +200,40 @@ package calista.hash
         private static function hexToChars(hex:String):Array 
         {
             var ar:Array = [] ;
-            for (var i:Number = (hex.substr(0, 2) == "0x") ? 2 : 0; i< hex.length ; i+=2) 
+            for (var i:int = (hex.substr(0, 2) == "0x") ? 2 : 0 ; i< hex.length ; i+=2) 
             {
                 ar.push( parseInt( hex.substr(i, 2), 16) ) ;
             }
             return ar ;
         }
-    
+        
         /**
          * Converts an array of longs back to an array of chars.
          * @private
          */
         private static function longsToChars( longs:Array ):Array 
         {
-            var ar:Array = new Array();
-            var size:Number = longs.length ;
-            for ( var i:Number = 0 ; i<size ; i++ ) 
+            var ar:Array = [] ; 
+            var size:int = longs.length ;
+            for ( var i:int ; i<size ; i++ ) 
             {
                 ar.push(longs[i] & 0xFF, longs[i]>>>8 & 0xFF, longs[i]>>>16 & 0xFF, longs[i]>>>24 & 0xFF) ;
             }
             return ar;
         }
-    
+        
         /**
          * @private
          */
         private static function strToChars(str:String):Array 
         {
-            var codes:Array = new Array();
-            for (var i:Number = 0; i<str.length; i++) 
+            var codes:Array = [] ; 
+            var len:int = str.length ;
+            for (var i:int ; i<len ; i++) 
             {
                 codes.push(str.charCodeAt(i));
             }
             return codes;
-        }        
-        
+        }
     }
-    
 }

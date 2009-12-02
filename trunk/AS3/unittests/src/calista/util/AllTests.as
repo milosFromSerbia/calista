@@ -14,38 +14,32 @@
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <vegas@ekameleon.net>.
-  Portions created by the Initial Developer are Copyright (C) 2004-2009
+  Portions created by the Initial Developer are Copyright (C) 2004-2010
   the Initial Developer. All Rights Reserved.
   
   Contributor(s) :
   
 */
-package calista.util  
+package calista.util
 {
     import buRRRn.ASTUce.framework.ITest;
-    import buRRRn.ASTUce.framework.TestSuite;    
-
+    import buRRRn.ASTUce.framework.TestSuite;
+    
     /**
      * This class launch all tests.
      */
     public class AllTests
     {
-        
         /**
          * Creates the Test list.
-         */        
+         */
         public static function suite():ITest
         {
-            
             var suite:TestSuite = new TestSuite( "Test CAListAS util package" );
-
             suite.addTestSuite( TestBase64 ) ;
             suite.addTestSuite( TestBase8 ) ;
-            suite.addTestSuite( TestLZW ) ;   
-
+            suite.addTestSuite( TestLZW ) ;
             return suite;
-            
         }
-        
     }
 }
