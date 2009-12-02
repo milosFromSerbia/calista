@@ -14,7 +14,7 @@
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <ekameleon@gmail.com>.
-  Portions created by the Initial Developer are Copyright (C) 2004-2009
+  Portions created by the Initial Developer are Copyright (C) 2004-2010
   the Initial Developer. All Rights Reserved.
   
   Contributor(s) :
@@ -22,7 +22,6 @@
 */
 package calista.hash 
 {
-
     /**
      * SHA-1 is one of the most secure hash algorithms. 
      * A hash is not ‘encryption’ – it cannot be decrypted back to the original text (it is a ‘one-way’ cryptographic function, and is a fixed size for any size of source text).
@@ -48,7 +47,6 @@ package calista.hash
      */
     public class SHA1 
     {
-        
         /**
          * Encrypt the specified text with the SHA1 algorithm.
          * <p><b>Example :</b></p>
@@ -67,9 +65,9 @@ package calista.hash
             var i:Number ;
             var j:Number ;
             var t:Number ;
-                    
+            
             var K:Array = [ 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 ];
-                    
+            
             // PREPROCESSING 
              
             message += String.fromCharCode(0x80) ; 
@@ -186,9 +184,9 @@ package calista.hash
         }
         
         /**
-          * Rotate left (circular left shift) value x by n positions.
-          */
-          private static function ROTL( x:Number , n:Number ):Number
+         * Rotate left (circular left shift) value x by n positions.
+         */
+        private static function ROTL( x:Number , n:Number ):Number
         {
             return ( x<<n ) | ( x >>> (32-n) );
         }
@@ -197,7 +195,7 @@ package calista.hash
          * Returns the tailored hex-string string representation of the passed-in number value.
          * @return the tailored hex-string string representation of the passed-in number value.
          */
-         private static function toHexStr( n:Number ):String
+        private static function toHexStr( n:Number ):String
         {
             var s:String = "" ;
             var v:Number ;
@@ -208,6 +206,5 @@ package calista.hash
             }
             return s;
         }
-        
     }
 }

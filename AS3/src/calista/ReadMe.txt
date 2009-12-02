@@ -1,5 +1,4 @@
- 
-   CalistA AS3 - version 1
+CalistA AS3 - version 1
  
    CalistA is a little cryptography library written in Actionscript include in the VEGAS framework.
  
@@ -16,17 +15,10 @@
 
     - http://code.google.com/p/calista/ (tutorials and install)
     - http://code.google.com/p/calista/issues/list (issues)
-    - http://www.ekameleon.net/blog/ (french blog)
-    - http://vegas.ekameleon.net/docs (AS2 reference)
+    - http://vegas.ekameleon.net/docs (AS3 reference)
 
    ABOUT
 
-    * Author  : ALCARAZ Marc (aka eKameleon)
-    * Version : AS3 v1
-    * Link    : http://www.ekameleon.net/blog
-    * Mail    : vegas@ekameleon.net 
-
-   THANKS
-
-    * Zwetan : ECMAScript Concepts and hosting | http://zwetan.com/
-    * PowerFlasher - FDT OpenSource Licence : http://powerflasher.com/ 
+    - Author  : ALCARAZ Marc (aka eKameleon)
+    - Link    : http://www.ekameleon.net/blog
+    - Mail    : ekameleon@gmail.com

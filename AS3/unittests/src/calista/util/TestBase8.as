@@ -14,7 +14,7 @@
   
   The Initial Developer of the Original Code is
   ALCARAZ Marc (aka eKameleon)  <vegas@ekameleon.net>.
-  Portions created by the Initial Developer are Copyright (C) 2004-2009
+  Portions created by the Initial Developer are Copyright (C) 2004-2010
   the Initial Developer. All Rights Reserved.
   
   Contributor(s) :
@@ -28,8 +28,6 @@ package calista.util
     
     /**
      * This class test the Base8 class.
-     * @author eKameleon
-     * @author NiKoS
      */
     public class TestBase8 extends TestCase 
     {
@@ -37,18 +35,17 @@ package calista.util
         {
             super( name );
         }
-
+        
         public function testDecode():void
         {
             var decode:String = Base8.decode( "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" ) ;
             assertEquals( decode ,  "hello world with a base 8 algorithm" , "The decode method failed." ) ;
-        }        
-            
+        }
+        
         public function testEncode():void
         {
             var encode:String = Base8.encode( "hello world with a base 8 algorithm" ) ;
             assertEquals( encode ,  "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" , "The encode method failed." ) ;
-        }        
-        
+        }
     }
 }
