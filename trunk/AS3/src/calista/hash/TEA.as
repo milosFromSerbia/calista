@@ -41,7 +41,7 @@ package calista.hash
      * <p>Original Javascript implementation :</p>
      * Chris Veness, Movable Type Ltd: www.movable-type.co.uk
      * Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab
-     * See http://www.movable-type.co.uk/scripts/TEAblock.html
+     * See http://www.movable-type.co.uk/scripts/tea-block.html
      */
     public class TEA 
     {
@@ -152,8 +152,8 @@ package calista.hash
          */
         private static function charsToLongs(chars:Array):Array 
         {  
-            var size:Number = Math.ceil( chars.length/4 ) ;
-            var ar:Array    = new Array(size);
+            var size:int = Math.ceil( chars.length/4 ) ;
+            var ar:Array = new Array(size);
             for (var i:int ; i<size ; i++) 
             {
                 ar[i] = chars[i*4] + (chars[i*4+1]<<8) + (chars[i*4+2]<<16) + (chars[i*4+3]<<24);

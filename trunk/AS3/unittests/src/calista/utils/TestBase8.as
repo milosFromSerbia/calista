@@ -20,31 +20,30 @@
   Contributor(s) :
   
 */
-package calista  
+package calista.utils 
 {
-    import buRRRn.ASTUce.framework.ITest;
-    import buRRRn.ASTUce.framework.TestSuite;
-    
-    import calista.hash.AllTests;    
-    import calista.utils.AllTests;
+    import buRRRn.ASTUce.framework.TestCase;
     
     /**
-     * This class launch all tests.
+     * This class test the Base8 class.
      */
-    public class AllTests
+    public class TestBase8 extends TestCase 
     {
-        /**
-         * Creates the Test list.
-         */
-        public static function suite():ITest
+        public function TestBase8(name : String = "")
         {
-            var suite:TestSuite = new TestSuite( "calista" );
-            
-            suite.addTest( calista.hash.AllTests.suite()  ) ;
-            suite.addTest( calista.utils.AllTests.suite()  ) ;
-            
-            return suite;
+            super( name );
+        }
+        
+        public function testDecode():void
+        {
+            var decode:String = Base8.decode( "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" ) ;
+            assertEquals( decode ,  "hello world with a base 8 algorithm" , "The decode method failed." ) ;
+        }
+        
+        public function testEncode():void
+        {
+            var encode:String = Base8.encode( "hello world with a base 8 algorithm" ) ;
+            assertEquals( encode ,  "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" , "The encode method failed." ) ;
         }
     }
 }
-
