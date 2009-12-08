@@ -23,21 +23,56 @@
 
 package examples 
 {
+	import graphics.display.ByteArrays;
     import calista.utils.Base64;
     
     import flash.display.Sprite;
+    import flash.utils.ByteArray;
+    import flash.utils.getTimer;
     
     public class Base64Example extends Sprite 
     {
         public function Base64Example()
         {
-            var source:String = "hello world with a base 64 algorithm" ;
+            var source:String ;
+            var encode:String ;
+            var decode:String ;
             
-            var encode:String = Base64.encode( source ) ;
-            trace("encode : " + encode) ;
+            source = "hello world with a base 64 algorithm" ;
+           
+            var bytes:ByteArray ;
             
-            var decode:String = Base64.decode( encode ) ;
-            trace("decode : " + decode) ;
+            bytes = new ByteArray();
+            bytes.writeUTFBytes(source);
+            
+            var i:int ;
+            var timer:int ;
+            
+            var loop:int = 5000 ;
+            
+            timer = getTimer() ;
+            for( i = 0 ; i<loop ; i++ )
+            {
+                encode = Base64.encode( source ) ;
+                decode = Base64.decode( encode ) ;
+               
+            }
+            timer = getTimer() - timer ;
+            trace("encode : " + encode + " timer:" + timer + " ms") ;
+            trace("decode : " + decode + " timer:" + timer + " ms") ;
+            
+            var result:ByteArray ;
+            
+            timer = getTimer() ;
+            for( i = 0 ; i<loop ; i++ )
+            {
+                encode = Base64.encodeByteArray( bytes ) ;
+                result = Base64.decodeToByteArray( encode ) ;
+            }
+            timer = getTimer() - timer ;
+            trace("encode : " + encode + " timer:" + timer + " ms") ;
+            trace("bytes  : " + ByteArrays.equals(bytes, result)  + " timer:" + timer + " ms") ;
+
         }
     }
 }

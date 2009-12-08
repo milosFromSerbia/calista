@@ -43,14 +43,17 @@ package calista.utils
          */
         public static function encode( str:String ):String
         {
-            str = new String(str) ; // optimize
-            var size:Number   = str.length ;
-            var result:String = "" ;
-            for (var i:Number = 0; i<size ; i++) 
+            if ( !str || str == "" )
             {
-                result += str.charCodeAt(i).toString(16);
+                return "" ;
             }
-            return result;
+            var output:String = "" ;
+            var size:int      = str.length ;
+            for (var i:int ; i<size ; i++) 
+            {
+                output += str.charCodeAt(i).toString(16);
+            }
+            return output;
         }
         
         /**
