@@ -24,7 +24,7 @@ package calista.hash
 {
     import buRRRn.ASTUce.framework.ITest;
     import buRRRn.ASTUce.framework.TestSuite;
-    
+
     /**
      * This class launch all tests.
      */
@@ -35,7 +35,10 @@ package calista.hash
          */
         public static function suite():ITest
         {
-           var suite:TestSuite = new TestSuite( "calista.hash" );
+           var suite:TestSuite = new TestSuite( "Test the calista.hash package" );
+           suite.addTestSuite( TestMD5 ) ;
+           suite.addTestSuite( TestSHA1 ) ;
+           suite.addTestSuite( TestTEA ) ;
            return suite;
         }
     }

@@ -20,13 +20,10 @@
   Contributor(s) :
   
 */
-package calista  
+package calista.utils
 {
     import buRRRn.ASTUce.framework.ITest;
     import buRRRn.ASTUce.framework.TestSuite;
-    
-    import calista.hash.AllTests;    
-    import calista.utils.AllTests;
     
     /**
      * This class launch all tests.
@@ -38,13 +35,11 @@ package calista
          */
         public static function suite():ITest
         {
-            var suite:TestSuite = new TestSuite( "calista" );
-            
-            suite.addTest( calista.hash.AllTests.suite()  ) ;
-            suite.addTest( calista.utils.AllTests.suite()  ) ;
-            
+            var suite:TestSuite = new TestSuite( "Test calista.utils package" );
+            suite.addTestSuite( TestBase64 ) ;
+            suite.addTestSuite( TestBase8 ) ;
+            suite.addTestSuite( TestLZW ) ;
             return suite;
         }
     }
 }
-

@@ -20,31 +20,30 @@
   Contributor(s) :
   
 */
-package calista  
+package calista.utils
 {
-    import buRRRn.ASTUce.framework.ITest;
-    import buRRRn.ASTUce.framework.TestSuite;
-    
-    import calista.hash.AllTests;    
-    import calista.utils.AllTests;
+    import buRRRn.ASTUce.framework.TestCase;
     
     /**
-     * This class launch all tests.
+     * This class test the Base64 class.
      */
-    public class AllTests
+    public class TestBase64 extends TestCase 
     {
-        /**
-         * Creates the Test list.
-         */
-        public static function suite():ITest
+        public function TestBase64( name : String="" )
         {
-            var suite:TestSuite = new TestSuite( "calista" );
-            
-            suite.addTest( calista.hash.AllTests.suite()  ) ;
-            suite.addTest( calista.utils.AllTests.suite()  ) ;
-            
-            return suite;
+            super( name );
+        }
+        
+        public function testDecode():void
+        {
+            var decode:String = Base64.decode( "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+            assertEquals( decode ,  "hello world with a base 64 algorithm" , "The decode method failed." ) ;
+        }
+        
+        public function testEncode():void
+        {
+            var encode:String = Base64.encode( "hello world with a base 64 algorithm" ) ;
+            assertEquals( encode ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" , "The encode method failed." ) ;
         }
     }
 }
-

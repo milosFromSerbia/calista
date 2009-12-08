@@ -20,31 +20,30 @@
   Contributor(s) :
   
 */
-package calista  
+package calista.utils
 {
-    import buRRRn.ASTUce.framework.ITest;
-    import buRRRn.ASTUce.framework.TestSuite;
-    
-    import calista.hash.AllTests;    
-    import calista.utils.AllTests;
+    import buRRRn.ASTUce.framework.TestCase;
     
     /**
-     * This class launch all tests.
+     * This class test the LZW class.
      */
-    public class AllTests
+    public class TestLZW extends TestCase 
     {
-        /**
-         * Creates the Test list.
-         */
-        public static function suite():ITest
+        public function TestLZW(name : String = "")
         {
-            var suite:TestSuite = new TestSuite( "calista" );
-            
-            suite.addTest( calista.hash.AllTests.suite()  ) ;
-            suite.addTest( calista.utils.AllTests.suite()  ) ;
-            
-            return suite;
+           super( name );
+        }
+        
+        public function testCompress():void
+        {
+            var compress:String = LZW.compress( "hello world with LZW algorithm" ) ;
+            assertEquals( compress ,  "hello worldąith LZW algćČhm" , "The compress method failed." ) ;
+        }
+        
+        public function testDecompress():void
+        {
+            var decompress:String = LZW.decompress( "hello worldąith LZW algćČhm" ) ;
+            assertEquals( decompress ,  "hello world with LZW algorithm" , "The decompress method failed." ) ;
         }
     }
 }
-

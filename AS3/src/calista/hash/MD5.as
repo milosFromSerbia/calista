@@ -41,7 +41,7 @@ package calista.hash
      * RSA Data Security, Inc. MD5 Message Digest Algorithm, as defined in RFC 1321.
      * Version 2.1 Copyright Paul Johnston 1999 - 2002
      * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-      * See http://pajhome.org.uk/crypt/md5 for more info.
+     * See http://pajhome.org.uk/crypt/md5 for more info.
      */
     public class MD5 
     {
@@ -70,7 +70,7 @@ package calista.hash
         {
             return (num << cnt) | (num >>> (32-cnt));
         }
-    
+        
         /**
          * @private
          */
@@ -181,7 +181,7 @@ package calista.hash
         private static function gg(a:Number, b:Number, c:Number, d:Number, x:Number, s:Number, t:Number):Number 
         {
             return cmn((b & d) | (c & (~d)), a, b, x, s, t);
-        }    
+        }
         
         /**
          * @private
@@ -198,7 +198,7 @@ package calista.hash
         {
             return cmn(c ^ (b | (~d)), a, b, x, s, t);
         }
-            
+        
         /**
          * @private
          */
@@ -208,7 +208,7 @@ package calista.hash
             var msw:Number = (x >> 16)+(y >> 16)+(lsw >> 16);
             return (msw << 16) | (lsw & 0xFFFF);
         }
-            
+        
         /**
          * @private
          */
@@ -224,7 +224,7 @@ package calista.hash
             }
             return bin;
         }
-            
+        
         /**
          * @private
          */
@@ -238,8 +238,6 @@ package calista.hash
                 str += tab.charAt((binarray[i >> 2] >> ((i%4)*8+4)) & 0xF) + tab.charAt((binarray[i >> 2] >> ((i%4)*8)) & 0xF);
             }
             return str;
-        }    
-        
+        }
     }
-    
 }
