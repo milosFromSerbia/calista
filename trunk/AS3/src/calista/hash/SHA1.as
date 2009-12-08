@@ -77,15 +77,14 @@ package calista.hash
             // convert string message into 512-bit/16-integer blocks arrays of ints.
                     
             var l:Number = Math.ceil(length/4) + 2;  // long enough to contain message plus 2-word length
-            var N:Number = Math.ceil(l/16);              // in N 16-int blocks
+            var N:Number = Math.ceil(l/16);          // in N 16-int blocks
             var M:Array  = new Array(N) ;
             for (i=0; i<N; i++) 
             {
                 M[i] = new Array(16) ;
                 for (j=0; j<16; j++) // encode 4 chars per integer, big-endian encoding 
                 {  
-                    M[i][j] = (message.charCodeAt(i*64+j*4)<<24)  | (message.charCodeAt(i*64+j*4+1)<<16) | 
-                                (message.charCodeAt(i*64+j*4+2)<<8) | (message.charCodeAt(i*64+j*4+3));
+                    M[i][j] = (message.charCodeAt(i*64+j*4)<<24) | (message.charCodeAt(i*64+j*4+1)<<16) | (message.charCodeAt(i*64+j*4+2)<<8) | (message.charCodeAt(i*64+j*4+3));
                 }
             }
             
