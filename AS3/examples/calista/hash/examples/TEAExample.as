@@ -27,19 +27,17 @@ package examples
     
     import flash.display.Sprite;
     
-    // FIXME The TEA class bug, i must debug it
-    
     public class TEAExample extends Sprite 
     {
         public function TEAExample()
         {
-            var source:String = "hello world is secret" ;
+            var source:String   = "hello world is secret" ;
             var password:String = "calista" ;
             
             trace("source : " + source + " <" + source.length + ">" ) ;
             
             var encrypt:String = TEA.encrypt( source , password ) ;
-            trace("encrypt : " + encrypt + " <" + encrypt + ">" ) ;
+            trace("encrypt : " + encrypt + " <" + encrypt.length + ">" ) ;
             
             var decrypt:String = TEA.decrypt( encrypt , password ) ;
             trace("decrypt : " + decrypt + " <" + decrypt.length + ">" ) ;

@@ -19,10 +19,24 @@
   
   Contributor(s) :
   
+  Alternatively, the contents of this file may be used under the terms of
+  either the GNU General Public License Version 2 or later (the "GPL"), or
+  the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),
+  in which case the provisions of the GPL or the LGPL are applicable instead
+  of those above. If you wish to allow use of your version of this file only
+  under the terms of either the GPL or the LGPL, and not to allow others to
+  use your version of this file under the terms of the MPL, indicate your
+  decision by deleting the provisions above and replace them with the notice
+  and other provisions required by the LGPL or the GPL. If you do not delete
+  the provisions above, a recipient may use your version of this file under
+  the terms of any one of the MPL, the GPL or the LGPL.
+  
 */
+
 package calista.hash 
 {
-
+    import calista.utils.Base64;
+    
     /**
      * Wheeler & Needham’s Tiny Encryption Algorithm is a simple but powerful encryption algorithm (based on a ‘Feistel cipher’).
      * <p><b>Example :</b></p>
@@ -38,202 +52,144 @@ package calista.hash
      * var decrypt:String = TEA.decrypt(encrypt , password) ;
      * trace("decrypt : " + decrypt) ;
      * </pre>
-     * <p>Original Javascript implementation :</p>
-     * Chris Veness, Movable Type Ltd: www.movable-type.co.uk
-     * Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab
+     * <p><b>Original implementation :</b></p>
+     * <p>Chris Veness, Movable Type Ltd: www.movable-type.co.uk</p>
+     * <p>Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab</p>
      * See http://www.movable-type.co.uk/scripts/tea-block.html
+     * @see calista.utils.Base64
+     * @since FlashPlayer 10 & > (use the Vector class)
      */
     public class TEA 
     {
         /**
          * Uses corrected Block TEA to encrypt a string value using key.
-         * <pre class="prettyprint">
-         * import calista.hash.TEA ;
-         * 
-         * var source:String   = "hello world is secret" ;
-         * var password:String = "calista" ;
-         * 
-         * var encrypt:String = TEA.encrypt( source , password ) ;
-         * trace("encrypt : " + encrypt) ;
-         * // encrypt : 021fd8983c171657403494ffe971fdbea3f48acea8418864
-         * </pre>
-         * @return encrypted text as string
+         * @param source The source to encrypt.
+         * @param key The password key to encrypt the source (1st 16 chars).
+         * @return The encrypted text as string.
          */
-        public static function encrypt( src:String, key:String ):String
+        public static function encrypt( source:String, key:String ):String
         {
-            var v:Array = charsToLongs(strToChars(src)) ;
-            var k:Array = charsToLongs(strToChars(key)) ;
-            var n:int = v.length ;
-            if (n == 0) 
+            if( !source || source.length == 0 ) 
             {
                 return "" ;
             }
-            if (n == 1) 
+            var v:Array = stringToLongs( source ) ;
+            if (v.length <= 1) 
             {
-                v[n++] = 0;
+                v[1] = 0 ;  // algorithm doesn't work for n<2 so fudge by adding a null
             }
-            var z:Number = v[n-1], y:Number = v[0], delta:Number = 0x9E3779B9 ;
-            var mx:Number ;
-            var e:Number  ;
-            var q:Number = Math.floor(6+52/n) ;
-            var sum:Number = 0 ;
+            
+            var k:Array = stringToLongs( key.slice( 0 , 16 ) ) ;
+            var n:int   = v.length;
+            
+            ////////// TEA
+            
+            var mx:int ;
+            var e:int ;
+            var p:int ;
+            
+            var z:int     = v[n-1] ;
+            var y:int     = v[0] ;
+            var q:int     = Math.floor(6 + 52/n) ; // 6 + 52/n operations gives between 6 & 32 mixes on each word
+            var delta:int = 0x9E3779B9 ;
+            var sum:int   = 0;
+            
             while (q-- > 0) 
-            {
+            {  
                 sum += delta;
                 e = sum>>>2 & 3;
-                for (var p:Number = 0; p<n-1; p++) 
+                for ( p = 0 ; p < n ; p++ ) 
                 {
-                    y = v[p+1];
-                    mx = (z>>>5^y<<2)+(y>>>3^z<<4)^(sum^y)+(k[p&3^e]^z);
+                    y = v[ (p+1)%n ];
+                    mx = ( z >>> 5 ^ y << 2 ) + ( y >>> 3 ^ z << 4) ^ ( sum ^ y) + ( k[ p & 3 ^ e ] ^ z ) ;
                     z = v[p] += mx;
                 }
-                y = v[0];
-                mx = (z>>>5^y<<2)+(y>>>3^z<<4)^(sum^y)+(k[p&3^e]^z);
-                z = v[n-1] += mx;
             }
-            return charsToHex(longsToChars(v));
+            
+            //////////
+            
+            return Base64.encode( longsToString( v ) ) ;
         }
         
         /**
-         * Use Corrected Block TEA to decrypt ciphertext using password.
-         * <p><b>Example :</b></p>
-         * <pre class="prettyprint">
-         * import calista.hash.TEA ;
-         * 
-         * var source:String = "hello world is secret" ;
-         * var password:String = "calista" ;
-         * 
-         * var encrypt:String = TEA.encrypt( source , password ) ;
-         * trace("encrypt : " + encrypt) ;
-         * 
-         * var decrypt:String = TEA.decrypt(encrypt , password) ;
-         * trace("decrypt : " + decrypt) ;
-         * 
-         * // encrypt : 021fd8983c171657403494ffe971fdbea3f48acea8418864
-         * // decrypt : hello world is secret
-         * </pre>
+         * Use Corrected Block TEA to decrypt ciphertext using key.
+         * @param cipher String to be decrypted.
+         * @param key The password to be used for decryption (1st 16 chars).
+         * @return The decrypted text
          */
-        public static function decrypt( src:String, key:String ):String
+        public static function decrypt( cipher:String , key:String ):String
         {
-            var v:Array = charsToLongs(hexToChars(src)) ;
-            var k:Array = charsToLongs(strToChars(key)) ;
-            var n:Number = v.length ;
-            if (n == 0) 
+            if ( !cipher || cipher.length == 0) 
             {
                 return "" ;
             }
-            var z:Number     = v[n-1] ;
-            var y:Number     = v[0]   ;
-            var delta:Number = 0x9E3779B9 ;
-            var mx:Number ;
-            var e:Number ;
-            var q:Number = Math.floor(6 + 52/n) ;
-            var sum:Number = q*delta ;
+            
+            var v:Array = stringToLongs( Base64.decode( cipher ) ) ;
+            var k:Array = stringToLongs( key.slice(0,16) ); 
+            var n:int   = v.length ;
+            
+            ////////// TEA
+            
+            var mx:int ;
+            var p:int ;
+            var e:int ;
+            
+            var z:int     = v[n-1] ;
+            var y:int     = v[0] ;
+            var delta:int = 0x9E3779B9 ;
+            var q:int     = Math.floor(6 + 52/n) ;
+            var sum:int   = q*delta;
+            
             while (sum != 0) 
             {
-                e = sum>>>2 & 3;
-                for(var p:Number = n-1; p > 0; p--)
+                e = sum >>> 2 & 3 ;
+                for ( p = n-1 ; p >= 0 ; p--) 
                 {
-                    z  = v[p-1] ;
-                    mx = (z>>>5^y<<2)+(y>>>3^z<<4)^(sum^y)+(k[p&3^e]^z) ;
-                    y  = v[p] -= mx ;
+                    z = v[ ( p > 0 ) ? p - 1 : n - 1 ] ;
+                    mx = (z>>>5 ^ y<<2) + (y>>>3 ^ z<<4) ^ (sum^y) + (k[p&3 ^ e] ^ z);
+                    y = v[p] -= mx ;
                 }
-                z         = v[n-1] ;
-                mx        = (z>>>5^y<<2)+(y>>>3^z<<4)^(sum^y)+(k[p&3^e]^z) ;
-                y = v[0] -= mx ;
-                sum      -= delta ;
+                sum -= delta;
             }
-            return charsToStr(longsToChars(v));
-        }
-        
-        /**
-         * Converts an array of chars to array of longs, each containing 4 chars.
-         * @private
-         */
-        private static function charsToLongs(chars:Array):Array 
-        {  
-            var size:int = Math.ceil( chars.length/4 ) ;
-            var ar:Array = new Array(size);
-            for (var i:int ; i<size ; i++) 
-            {
-                ar[i] = chars[i*4] + (chars[i*4+1]<<8) + (chars[i*4+2]<<16) + (chars[i*4+3]<<24);
-            }
-            return ar ; 
-        }
-        
-        /**
-         * Converts the char passed-in value in string hexadecimal string representation.
-         * @private
-         */
-        private static function charsToHex(chars:Array):String 
-        {
-            var result:String = new String("") ;
-            var hex:Array   = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f"] ;
-            var size:int = chars.length ;
-            for (var i:int ; i<size ; i++) 
-            {
-                result += hex[chars[i] >> 4] + hex[chars[i] & 0xf] ;
-            }
-            return result;
-        }
-        
-        /**
-         * Converts an array of chars in a string representation.
-         * @return a string representation of the passed-in array of chars.
-         * @private
-         */
-        private static function charsToStr(chars:Array):String 
-        {
-            var result:String = new String("") ;
-            var size:int = chars.length ;
-            for ( var i:int ; i<size ; i++ ) 
-            {
-                result += String.fromCharCode( chars[i] ) ;
-            }
-            return result ;
-        }
             
-        /**
-         * Converts the hexadecimal string passed-in argument in array of chars.
-         * @private
-         */
-        private static function hexToChars(hex:String):Array 
-        {
-            var ar:Array = [] ;
-            for (var i:int = (hex.substr(0, 2) == "0x") ? 2 : 0 ; i< hex.length ; i+=2) 
-            {
-                ar.push( parseInt( hex.substr(i, 2), 16) ) ;
-            }
-            return ar ;
+            //////////
+            
+            var source:String = longsToString( v ) ;
+            source = source.replace( /\0+$/ , "" ) ; // strip trailing null chars resulting from filling 4-char blocks
+            return source ;
         }
         
         /**
-         * Converts an array of longs back to an array of chars.
-         * @private
+         * Convert the specified Array of longs to a String.
          */
-        private static function longsToChars( longs:Array ):Array 
+        private static function longsToString( longs:Array ):String
         {
-            var ar:Array = [] ; 
-            var size:int = longs.length ;
-            for ( var i:int ; i<size ; i++ ) 
+            var i:int ;
+            var l:int   = longs.length ; 
+            var a:Array = new Array( l );
+            for ( i = 0; i < l ; i++) 
             {
-                ar.push(longs[i] & 0xFF, longs[i]>>>8 & 0xFF, longs[i]>>>16 & 0xFF, longs[i]>>>24 & 0xFF) ;
+                a[i] = String.fromCharCode( longs[i] & 0xFF , longs[i]>>>8 & 0xFF , longs[i] >>> 16 & 0xFF, longs[i] >>> 24 & 0xFF ) ;
             }
-            return ar;
+            return a.join('');  // use Array.join() rather than repeated string appends for efficiency in IE
         }
         
         /**
-         * @private
+         * Convert the specified String to an Array of longs, each containing 4 chars.
+         * Note: chars must be within ISO-8859-1 (with Unicode code-point < 256) to fit 4/long.
          */
-        private static function strToChars(str:String):Array 
-        {
-            var codes:Array = [] ; 
-            var len:int = str.length ;
-            for (var i:int ; i<len ; i++) 
+        private static function stringToLongs( s:String ):Array 
+        {  
+            var i:int ;
+            var l:int = Math.ceil( s.length / 4 ) ;
+            var longs:Array = new Array( l ) ; // 
+            for ( i = 0 ; i < l ; i++ ) 
             {
-                codes.push(str.charCodeAt(i));
+                longs[i] = s.charCodeAt(i*4) + (s.charCodeAt(i*4+1)<<8) + (s.charCodeAt(i*4+2)<<16) + (s.charCodeAt(i*4+3)<<24);
             }
-            return codes;
+            return longs ;
         }
+
+
     }
 }
