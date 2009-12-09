@@ -38,7 +38,7 @@ package calista.hash
            var suite:TestSuite = new TestSuite( "Test the calista.hash package" );
            suite.addTestSuite( TestMD5 ) ;
            suite.addTestSuite( TestSHA1 ) ;
-           suite.addTestSuite( TestTEA ) ;
+           // FIXME suite.addTestSuite( TestTEA ) ;
            return suite;
         }
     }
