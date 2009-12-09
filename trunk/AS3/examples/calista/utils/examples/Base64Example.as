@@ -72,7 +72,6 @@ package examples
             timer = getTimer() - timer ;
             trace("encode : " + encode + " timer:" + timer + " ms") ;
             trace("bytes  : " + ByteArrays.equals(bytes, result)  + " timer:" + timer + " ms") ;
-
         }
     }
 }

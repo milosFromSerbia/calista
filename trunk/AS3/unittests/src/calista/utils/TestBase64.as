@@ -24,6 +24,10 @@ package calista.utils
 {
     import buRRRn.ASTUce.framework.TestCase;
     
+    import graphics.display.ByteArrays;
+    
+    import flash.utils.ByteArray;
+    
     /**
      * This class test the Base64 class.
      */
@@ -34,16 +38,35 @@ package calista.utils
             super( name );
         }
         
-        public function testDecode():void
-        {
-            var decode:String = Base64.decode( "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
-            assertEquals( decode ,  "hello world with a base 64 algorithm" , "The decode method failed." ) ;
-        }
-        
         public function testEncode():void
         {
             var encode:String = Base64.encode( "hello world with a base 64 algorithm" ) ;
-            assertEquals( encode ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" , "The encode method failed." ) ;
+            assertEquals( encode ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+        }
+        
+        public function testEncodeByteArray():void
+        {
+            var source:String   = "hello world with a base 64 algorithm" ;
+            var bytes:ByteArray = new ByteArray();
+            
+            bytes.writeUTFBytes(source) ;
+            
+            var result:String = Base64.encodeByteArray( bytes ) ;
+            assertEquals( result ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+        }
+        
+        public function testDecode():void
+        {
+            var decode:String = Base64.decode( "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+            assertEquals( decode ,  "hello world with a base 64 algorithm" ) ;
+        }
+        
+        public function testDecodeByteArray():void
+        {
+            var bytes:ByteArray = new ByteArray() ;
+            bytes.writeUTFBytes("hello world with a base 64 algorithm") ;
+            var result:ByteArray  = Base64.decodeToByteArray( "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+            assertTrue( ByteArrays.equals(bytes, result) ) ;
         }
     }
 }
