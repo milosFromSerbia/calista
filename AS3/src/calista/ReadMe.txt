@@ -1,15 +1,15 @@
-CalistA AS3 - version 1.0.0.8
+CalistA AS3 - version 1.0.0.14
  
    CalistA is a little cryptography library written in ActionScript include in the VEGAS framework.
  
    LICENCE 
 
-	Mozilla Public License 1.1 (MPL 1.1) (read Licence.txt)
+    Mozilla Public License 1.1 (MPL 1.1) (read Licence.txt)
 
    PROJECT PAGES
 
-	- http://code.google.com/p/calista/
-	- http://code.google.com/p/vegas/
+    - http://code.google.com/p/calista/
+    - http://code.google.com/p/vegas/
 
    DOCUMENTATION & CO
 
@@ -19,6 +19,6 @@ CalistA AS3 - version 1.0.0.8
 
    ABOUT
 
-    - Author  : ALCARAZ Marc (aka eKameleon)
-    - Link    : http://www.ekameleon.net/
-    - Mail    : ekameleon@gmail.com
+    - Author : ALCARAZ Marc (aka eKameleon)
+    - Link   : http://www.ekameleon.net/
+    - Mail   : ekameleon@gmail.com
