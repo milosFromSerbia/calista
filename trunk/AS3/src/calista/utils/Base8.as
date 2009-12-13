@@ -37,6 +37,21 @@ package calista.utils
 {
     /**
      * The Base8 algorithm encoding tool class.
+     * <p><b>Example :</b></p>
+     * <pre class="prettyprint">
+     * import calista.utils.Base8 ;
+     * 
+     * var source:String = "hello world with a base 8 algorithm" ;
+     * 
+     * var encode:String = Base8.encode( source ) ;
+     * trace("encode : " + encode) ;
+     * 
+     * var decode:String = Base8.decode( encode ) ;
+     * trace("decode : " + decode) ;
+     * 
+     * // encode : 68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d
+     * // decode : hello world with a base 8 algorithm
+     * </pre>
      */
     public class Base8 
     {
@@ -45,26 +60,21 @@ package calista.utils
          * <p><b>Example :</b></p>
          * <pre class="prettyprint">
          * import calista.utils.Base8 ;
-         * var source:String = "hello world with a base 8 algorithm" ;
-         * 
-         * var encode:String = Base8.encode( source ) ;
-         * trace("encode : " + encode) ;
-         * 
-         * // encode : 68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d
-         * 
+         * var encode:String = Base8.encode( "hello world with a base 8 algorithm" ) ;
+         * trace("encode : " + encode) ; // encode : 68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d
          * </pre>
          */
-        public static function encode( str:String ):String
+        public static function encode( source:String ):String
         {
-            if ( !str || str == "" )
+            if ( !source || source == "" )
             {
                 return "" ;
             }
             var output:String = "" ;
-            var size:int      = str.length ;
+            var size:int = source.length ;
             for (var i:int ; i<size ; i++) 
             {
-                output += str.charCodeAt(i).toString(16);
+                output += source.charCodeAt(i).toString(16);
             }
             return output;
         }
@@ -74,28 +84,21 @@ package calista.utils
          * <p><b>Example :</b></p>
          * <pre class="prettyprint">
          * import calista.utils.Base8 ;
-         * 
-         * var source:String = "hello world with a base 8 algorithm" ;
-         * 
-         * var encode:String = Base8.encode( source ) ;
-         * trace("encode : " + encode) ;
-         * 
-         * var decode:String = Base8.decode( encode ) ;
-         * trace("decode : " + decode) ;
-         * 
-         * // encode : 68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d
-         * // decode : hello world with a base 8 algorithm
-         * 
+         * var decode:String = Base8.decode( "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" ) ;
+         * trace("decode : " + decode) ; // decode : "hello world with a base 8 algorithm"
          * </pre>
          */
-        public static function decode( str:String ):String
+        public static function decode( source:String ):String
         {
-            str = new String(str) ; // optimize
-            var result:String = "" ;
-            var size:Number   = str.length ;
-            for ( var i:Number = 0 ; i<size ;  i+=2 ) 
+            if ( !source || source == "" )
             {
-                result += String.fromCharCode( parseInt(str.substr(i, 2), 16));
+                return "" ;
+            }
+            var result:String = "" ;
+            var size:int = source.length ;
+            for ( var i:int ; i < size ;  i+=2 ) 
+            {
+                result += String.fromCharCode( parseInt(source.substr(i, 2), 16));
             }
             return result;
         }
