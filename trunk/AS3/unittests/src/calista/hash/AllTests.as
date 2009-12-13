@@ -49,11 +49,11 @@ package calista.hash
         public static function suite():ITest
         {
            var suite:TestSuite = new TestSuite( "Test the calista.hash package" );
-           suite.addTestSuite( TestAdler32 ) ;
-           suite.addTestSuite( TestCRC32 ) ;
-           suite.addTestSuite( TestMD5 ) ;
-           suite.addTestSuite( TestSHA1 ) ;
-           suite.addTestSuite( TestTEA ) ;
+           suite.addTestSuite( Adler32Test ) ;
+           suite.addTestSuite( CRC32Test ) ;
+           suite.addTestSuite( MD5Test ) ;
+           suite.addTestSuite( SHA1Test ) ;
+           suite.addTestSuite( TEATest ) ;
            return suite;
         }
     }

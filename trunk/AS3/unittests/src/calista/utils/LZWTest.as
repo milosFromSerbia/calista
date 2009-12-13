@@ -40,9 +40,9 @@ package calista.utils
     /**
      * This class test the LZW class.
      */
-    public class TestLZW extends TestCase 
+    public class LZWTest extends TestCase 
     {
-        public function TestLZW(name : String = "")
+        public function LZWTest(name : String = "")
         {
            super( name );
         }

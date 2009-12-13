@@ -49,9 +49,9 @@ package calista.utils
         public static function suite():ITest
         {
             var suite:TestSuite = new TestSuite( "Test calista.utils package" );
-            suite.addTestSuite( TestBase64 ) ;
-            suite.addTestSuite( TestBase8 ) ;
-            suite.addTestSuite( TestLZW ) ;
+            suite.addTestSuite( Base64Test ) ;
+            suite.addTestSuite( Base8Test ) ;
+            suite.addTestSuite( LZWTest ) ;
             return suite;
         }
     }

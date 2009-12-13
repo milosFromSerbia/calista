@@ -39,9 +39,9 @@ package calista.hash
     
     import flash.utils.ByteArray;
     
-    public class TestAdler32 extends TestCase 
+    public class CRC32Test extends TestCase 
     {
-        public function TestAdler32( name:String = "" )
+        public function CRC32Test(name:String = "")
         {
             super(name);
         }
@@ -49,9 +49,14 @@ package calista.hash
         public function testCheckSum():void
         {
             var bytes:ByteArray ;
+            
+            bytes = new ByteArray() ;
+            bytes.writeUTFBytes("hello world") ;
+            assertEquals( CRC32.checkSum(bytes) , 0xD4A1185 ) ; // 222957957
+            
             bytes  = new ByteArray() ;
-            bytes.writeUTFBytes("Wikipedia") ;
-            assertEquals( Adler32.checkSum(bytes) , 0x11E60398 ) ; // 300286872
+            bytes.writeUTFBytes("ABC") ;
+            assertEquals( CRC32.checkSum(bytes) , 0xA3830348 ) ;
         }
     }
 }
