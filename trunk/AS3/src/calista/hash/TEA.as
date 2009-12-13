@@ -55,7 +55,7 @@ package calista.hash
      * <p><b>Original implementation :</b></p>
      * <p>Chris Veness, Movable Type Ltd: www.movable-type.co.uk</p>
      * <p>Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab</p>
-     * See http://www.movable-type.co.uk/scripts/tea-block.html
+     * See <a href="http://www.movable-type.co.uk/scripts/tea-block.html">Tiny Encryption Algorithm</a>
      * @see calista.utils.Base64
      * @since FlashPlayer 10 & > (use the Vector class)
      */

@@ -52,7 +52,7 @@ package calista.hash
            suite.addTestSuite( Adler32Test ) ;
            suite.addTestSuite( CRC32Test ) ;
            suite.addTestSuite( MD5Test ) ;
-           suite.addTestSuite( SHA1Test ) ;
+           suite.addTestSuite( SHA1Test ) ;           suite.addTestSuite( SHA256Test ) ;
            suite.addTestSuite( TEATest ) ;
            return suite;
         }
