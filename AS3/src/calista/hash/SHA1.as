@@ -54,14 +54,14 @@ package calista.hash
      * 
      * </pre>
      * <p>Original Javascript implementation :</p>
-     * Chris Veness, Movable Type Ltd: www.movable-type.co.uk
-     * Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab
-     * See http://www.movable-type.co.uk/scripts/TEAblock.html
+     * <p>Chris Veness, Movable Type Ltd: www.movable-type.co.uk</p>
+     * <p>Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab</p>
+     * <p>See <a href="http://www.movable-type.co.uk/scripts/sha1.html">SHA-1 cryptographic hash function</a></p>
      */
     public class SHA1 
     {
         /**
-         * Encrypt the specified text with the SHA1 algorithm.
+         * Encrypt the specified text with the SHA-1 algorithm.
          * <p><b>Example :</b></p>
          * <pre class="prettyprint">
          * import calista.hash.SHA1 ;
@@ -179,8 +179,8 @@ package calista.hash
          * Returns a specific value if s is 0, 1, 2 or 3.
          * @return a specific value if s is 0, 1, 2 or 3.
          */
-         private static function f( s:Number, x:Number, y:Number, z:Number ):Number 
-         {
+        private static function f( s:Number, x:Number, y:Number, z:Number ):Number 
+        {
             switch (s) 
             {
                 case 0  : return (x & y) ^ (~x & z);           // Ch()
