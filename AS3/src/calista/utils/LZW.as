@@ -52,22 +52,21 @@ package calista.utils
          * trace("compress : " + compress) ;
          * </pre>
          */
-        public static function compress( str:String ):String
+        public static function compress( source:String ):String
         {
-            var i:Number    ;
-            var size:Number ;
+            var i:int    ;
+            var size:int ;
             var xstr:String;
-            var chars:Number = 256;
-            var original:String = new String(str) ;
+            var chars:int = 256;
             var dict:Array = new Array();
             for ( i = 0 ; i<chars ; i++ ) 
             {
                 dict[String(i)] = i;
             }
             var current:String ;
-            var result:String = new String("");
-            var splitted:Array = original.split("");
-            var buffer:Array = new Array();
+            var result:String = "";
+            var splitted:Array = source.split("");
+            var buffer:Array = [] ;
             size = splitted.length ;
             for ( i = 0 ; i<=size ; i++) 
             {
@@ -104,25 +103,26 @@ package calista.utils
          * trace("decompress : " + decompress) ; // decompress : hello world with LZW algorithm
          * </pre>
          */
-        public static function decompress( str:String ):String
+        public static function decompress( source:String ):String
         {
-            var i:Number ;
-            var chars:Number = 256;
-            var dict:Array = new Array();
+            var i:int ;
+            var chars:int = 256;
+            var dict:Array = [] ;
             for (i = 0; i<chars; i++) 
             {
                 dict[i] = String.fromCharCode(i);
             }
-            var original:String = new String(str) ;
-            var splitted:Array  = original.split("");
-            var size:Number     = splitted.length ;
-            var buffer:String   = new String("");
-            var chain:String    = new String("");
-            var result:String   = new String("");
+            var splitted:Array  = source.split("");
+            var size:int        = splitted.length ;
+            var buffer:String   = "" ;
+            var chain:String    = "" ;
+            var result:String   = "" ;
+            var current:String ;
+            var code:Number ;
             for ( i = 0; i<size ; i++ ) 
             {
-                var code:Number    = original.charCodeAt(i);
-                var current:String = dict[code];
+                code    = source.charCodeAt(i);
+                current = dict[code];
                 if (buffer == "") 
                 {
                     buffer = current;
