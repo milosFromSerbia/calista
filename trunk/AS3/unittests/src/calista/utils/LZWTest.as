@@ -49,14 +49,14 @@ package calista.utils
         
         public function testCompress():void
         {
-            var compress:String = LZW.compress( "hello world with LZW algorithm" ) ;
-            assertEquals( compress ,  "hello worldąith LZW algćČhm" , "The compress method failed." ) ;
+            assertEquals( "hello worldąith LZW algćČhm" , LZW.compress( "hello world with LZW algorithm" ) ) ;
+            assertEquals( "TOBEORNOTĀĂĄĉăąć#" , LZW.compress( "TOBEORNOTTOBEORTOBEORNOT#" ) ) ;
         }
         
         public function testDecompress():void
         {
-            var decompress:String = LZW.decompress( "hello worldąith LZW algćČhm" ) ;
-            assertEquals( decompress ,  "hello world with LZW algorithm" , "The decompress method failed." ) ;
+            assertEquals( "hello world with LZW algorithm" , LZW.decompress( "hello worldąith LZW algćČhm" ) ) ;
+            assertEquals( "TOBEORNOTTOBEORTOBEORNOT#" , LZW.decompress( "TOBEORNOTĀĂĄĉăąć#" ) ) ;
         }
     }
 }
