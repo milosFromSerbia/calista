@@ -37,26 +37,16 @@ package calista.hash
 {
     import buRRRn.ASTUce.framework.TestCase;
     
-    import flash.utils.ByteArray;
-    
-    public class TestCRC32 extends TestCase 
+    public class MD5Test extends TestCase 
     {
-        public function TestCRC32(name:String = "")
+        public function MD5Test(name:String = "")
         {
             super(name);
         }
         
-        public function testCheckSum():void
+        public function testEncrypt():void
         {
-            var bytes:ByteArray ;
-            
-            bytes = new ByteArray() ;
-            bytes.writeUTFBytes("hello world") ;
-            assertEquals( CRC32.checkSum(bytes) , 0xD4A1185 ) ; // 222957957
-            
-            bytes  = new ByteArray() ;
-            bytes.writeUTFBytes("ABC") ;
-            assertEquals( CRC32.checkSum(bytes) , 0xA3830348 ) ;
+            assertEquals( MD5.encrypt("calista") , '93fc1e28bc17af6420552b746af10f4f' ) ;
         }
     }
 }

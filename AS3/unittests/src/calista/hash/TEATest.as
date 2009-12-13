@@ -37,16 +37,26 @@ package calista.hash
 {
     import buRRRn.ASTUce.framework.TestCase;
     
-    public class TestSHA1 extends TestCase 
+    public class TEATest extends TestCase 
     {
-        public function TestSHA1(name:String = "")
+        public function TEATest(name:String = "")
         {
             super(name);
         }
         
         public function testEncrypt():void
         {
-            assertEquals( SHA1.encrypt("hello world") , '2aae6c35c94fcfb415dbe95f408b9ce91ee846ed' ) ;
+            var source:String   = "hello world is secret" ;
+            var password:String = "calista" ;
+            var result:String = TEA.encrypt( source , password ) ;
+            assertEquals( result , "Ah/YmDwXFldANJT/6XH9vqP0is6oQYhk" ) ;
+        }
+        
+        public function testDecrypt():void
+        {
+            var source:String   = "Ah/YmDwXFldANJT/6XH9vqP0is6oQYhk" ;
+            var password:String = "calista" ;
+            assertEquals( TEA.decrypt( source , password ) , "hello world is secret" ) ;
         }
     }
 }

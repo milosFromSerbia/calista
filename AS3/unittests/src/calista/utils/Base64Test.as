@@ -33,30 +33,53 @@
   
 */
 
-package calista.utils 
+package calista.utils
 {
     import buRRRn.ASTUce.framework.TestCase;
     
+    import graphics.display.ByteArrays;
+    
+    import flash.utils.ByteArray;
+    
     /**
-     * This class test the Base8 class.
+     * This class test the Base64 class.
      */
-    public class TestBase8 extends TestCase 
+    public class Base64Test extends TestCase 
     {
-        public function TestBase8(name : String = "")
+        public function Base64Test( name : String="" )
         {
             super( name );
         }
         
-        public function testDecode():void
-        {
-            var decode:String = Base8.decode( "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" ) ;
-            assertEquals( decode ,  "hello world with a base 8 algorithm" , "The decode method failed." ) ;
-        }
-        
         public function testEncode():void
         {
-            var encode:String = Base8.encode( "hello world with a base 8 algorithm" ) ;
-            assertEquals( encode ,  "68656c6c6f20776f726c64207769746820612062617365203820616c676f726974686d" , "The encode method failed." ) ;
+            var encode:String = Base64.encode( "hello world with a base 64 algorithm" ) ;
+            assertEquals( encode ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+        }
+        
+        public function testEncodeByteArray():void
+        {
+            var source:String   = "hello world with a base 64 algorithm" ;
+            var bytes:ByteArray = new ByteArray();
+            
+            bytes.writeUTFBytes(source) ;
+            
+            var result:String = Base64.encodeByteArray( bytes ) ;
+            assertEquals( result ,  "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+        }
+        
+        public function testDecode():void
+        {
+            var decode:String = Base64.decode( "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+            assertEquals( decode ,  "hello world with a base 64 algorithm" ) ;
+        }
+        
+        public function testDecodeByteArray():void
+        {
+            var bytes:ByteArray = new ByteArray() ;
+            bytes.writeUTFBytes("hello world with a base 64 algorithm") ;
+            var result:ByteArray  = Base64.decodeToByteArray( "aGVsbG8gd29ybGQgd2l0aCBhIGJhc2UgNjQgYWxnb3JpdGht" ) ;
+            assertTrue( ByteArrays.equals(bytes, result) ) ;
         }
     }
 }
