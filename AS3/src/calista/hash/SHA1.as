@@ -75,9 +75,9 @@ package calista.hash
         public static function encrypt( message:String ):String
         {
         
-            var i:Number ;
-            var j:Number ;
-            var t:Number ;
+            var i:int ;
+            var j:int ;
+            var t:int ;
             
             var K:Array = [ 0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6 ];
             
@@ -85,12 +85,12 @@ package calista.hash
              
             message += String.fromCharCode(0x80) ; 
                     
-            var length:Number = message.length ;
-                    
+            var length:int = message.length ;
+            
             // convert string message into 512-bit/16-integer blocks arrays of ints.
-                    
-            var l:Number = Math.ceil(length/4) + 2;  // long enough to contain message plus 2-word length
-            var N:Number = Math.ceil(l/16);          // in N 16-int blocks
+            
+            var l:int    = Math.ceil(length/4) + 2;  // long enough to contain message plus 2-word length
+            var N:int    = Math.ceil(l/16);          // in N 16-int blocks
             var M:Array  = new Array(N) ;
             for (i=0; i<N; i++) 
             {
@@ -110,25 +110,24 @@ package calista.hash
             
             // set initial hash value
             
-            var H0:Number = 0x67452301;
-            var H1:Number = 0xefcdab89;
-            var H2:Number = 0x98badcfe;
-            var H3:Number = 0x10325476;
-            var H4:Number = 0xc3d2e1f0;
+            var H0:int = 0x67452301;
+            var H1:int = 0xefcdab89;
+            var H2:int = 0x98badcfe;
+            var H3:int = 0x10325476;
+            var H4:int = 0xc3d2e1f0;
             
             // hash computation
             
             var W:Array = new Array(80) ; 
             
-            var a:Number ;
-            var b:Number ;
-            var c:Number ;
-            var d:Number ;
-            var e:Number ;
+            var a:int ;
+            var b:int ;
+            var c:int ;
+            var d:int ;
+            var e:int ;
             
             for ( i=0 ; i<N ; i++ ) 
             {
-                
                 // 1 - prepare message schedule 'W'
                 
                 for (t=0;  t<16; t++) 
@@ -156,8 +155,8 @@ package calista.hash
                 
                 for ( t=0 ; t<80 ; t++ ) 
                 {
-                    s = Math.floor(t/20); // seq for blocks of 'f' functions and 'K' constants
-                    T = (ROTL(a,5) + f(s,b,c,d) + e + K[s] + W[t]) & 0xffffffff;
+                    s = Math.floor( t/20 ) ; // seq for blocks of 'f' functions and 'K' constants
+                    T = (ROTL(a,5) + f( s , b , c , d ) + e + K[s] + W[t]) & 0xFFFFFFFF ;
                     e = d ;
                     d = c ;
                     c = ROTL(b, 30) ;
@@ -167,24 +166,21 @@ package calista.hash
                 
                 // 4 - compute the new intermediate hash value
                 
-                H0 = (H0+a) & 0xffffffff;  // note 'addition modulo 2^32'
-                H1 = (H1+b) & 0xffffffff; 
-                H2 = (H2+c) & 0xffffffff; 
-                H3 = (H3+d) & 0xffffffff; 
-                H4 = (H4+e) & 0xffffffff;
-                
+                H0 = (H0+a) & 0xFFFFFFFF ;  // note 'addition modulo 2^32'
+                H1 = (H1+b) & 0xFFFFFFFF ; 
+                H2 = (H2+c) & 0xFFFFFFFF ; 
+                H3 = (H3+d) & 0xFFFFFFFF ; 
+                H4 = (H4+e) & 0xFFFFFFFF ;
             }
-            
             return toHexStr(H0) + toHexStr(H1) + toHexStr(H2) + toHexStr(H3) + toHexStr(H4) ;
-            
         }
         
         /**
          * Returns a specific value if s is 0, 1, 2 or 3.
          * @return a specific value if s is 0, 1, 2 or 3.
          */
-         private static function f(s:Number, x:Number, y:Number, z:Number):Number 
-        {
+         private static function f( s:Number, x:Number, y:Number, z:Number ):Number 
+         {
             switch (s) 
             {
                 case 0  : return (x & y) ^ (~x & z);           // Ch()
@@ -210,10 +206,10 @@ package calista.hash
         private static function toHexStr( n:Number ):String
         {
             var s:String = "" ;
-            var v:Number ;
+            var v:int ;
             for ( var i:int=7 ; i>=0 ; i-- ) 
             { 
-                v = ( n >>> (i*4) ) & 0xf ;
+                v = ( n >>> (i*4) ) & 0xF ;
                 s += v.toString(16); 
             }
             return s;
