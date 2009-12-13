@@ -8,6 +8,7 @@
     <component id="calista.hash:CRC32"   class="calista.hash.CRC32"   />
     <component id="calista.hash:MD5"     class="calista.hash.MD5"     />
     <component id="calista.hash:SHA1"    class="calista.hash.SHA1"    />
+    <component id="calista.hash:SHA256"  class="calista.hash.SHA256"  />
     <component id="calista.hash:TEA"     class="calista.hash.TEA"     />
     
     <!-- calista.utils -->
