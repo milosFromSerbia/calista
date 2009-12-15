@@ -45,7 +45,7 @@ package calista.hash
      * <pre class="prettyprint">
      * import calista.hash.SHA1 ;
      * 
-     * var hash:String = SHA1.encrypt("calista") ;
+     * var hash:String = SHA256.encrypt("calista") ;
      * var equal:Boolean = hash == 'c37a4150a942afb4b36dd5c85ac744a16de0891c99d418ae7b5ef528dfcf2e9d' ;
      * 
      * trace("'hello world' SHA1 result : " + hash + " : " + equal ) ;
