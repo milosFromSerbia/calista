@@ -71,7 +71,7 @@ package calista.hash
          */
         public static function checkSum( buffer:ByteArray , index:uint = 0 , length:uint = 0 ):uint 
         {
-            var c:uint = ~0 ; // = 0xFFFFFF ;
+            var c:uint = ~0 ;
             if ( index >= buffer.length ) 
             { 
                 index = buffer.length ; 

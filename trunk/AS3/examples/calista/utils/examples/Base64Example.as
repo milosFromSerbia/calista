@@ -51,7 +51,7 @@ package examples
             var decode:String ;
             
             source = "hello world with a base 64 algorithm" ;
-           
+            
             var bytes:ByteArray ;
             
             bytes = new ByteArray();
@@ -67,7 +67,6 @@ package examples
             {
                 encode = Base64.encode( source ) ;
                 decode = Base64.decode( encode ) ;
-               
             }
             timer = getTimer() - timer ;
             trace("encode : " + encode + " timer:" + timer + " ms") ;

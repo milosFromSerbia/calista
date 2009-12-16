@@ -97,7 +97,6 @@ package calista.hash
                     b += a ;
                 } 
                 while ( --l ) ;
-                
                 a = (a & 0xFFFF) + (a >> 16) * 15 ;
                 b = (b & 0xFFFF) + (b >> 16) * 15 ;
             }

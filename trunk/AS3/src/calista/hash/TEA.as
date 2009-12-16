@@ -67,7 +67,7 @@ package calista.hash
          * @param key The password key to encrypt the source (1st 16 chars).
          * @return The encrypted text as string.
          */
-        public static function encrypt( source:String, key:String ):String
+        public static function encrypt( source:String , key:String ):String
         {
             if( !source || source.length == 0 ) 
             {
