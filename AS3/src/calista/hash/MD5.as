@@ -71,9 +71,9 @@ package calista.hash
          * trace("'calista' MD5 result : " + hash + " : " + equal ) ;
          * </pre>
          */
-        public static function encrypt( str:String ):String
+        public static function encrypt( source:String ):String
         {
-            return binl2hex( hash( str2binl(str) , str.length*8 ) ) ;
+            return binl2hex( hash( str2binl(source) , source.length*8 ) ) ;
         }
         
         /**

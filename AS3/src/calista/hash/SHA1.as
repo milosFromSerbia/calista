@@ -72,7 +72,7 @@ package calista.hash
          * trace("'hello world' SHA1 result : " + hash + " : " + equal ) ;
          * </pre>
          */
-        public static function encrypt( message:String ):String
+        public static function encrypt( source:String ):String
         {
         
             var i:int ;
@@ -83,9 +83,9 @@ package calista.hash
             
             // PREPROCESSING 
              
-            message += String.fromCharCode(0x80) ; 
-                    
-            var length:int = message.length ;
+            source += String.fromCharCode(0x80) ; 
+            
+            var length:int = source.length ;
             
             // convert string message into 512-bit/16-integer blocks arrays of ints.
             
@@ -97,7 +97,7 @@ package calista.hash
                 M[i] = new Array(16) ;
                 for (j=0; j<16; j++) // encode 4 chars per integer, big-endian encoding 
                 {  
-                    M[i][j] = (message.charCodeAt(i*64+j*4)<<24) | (message.charCodeAt(i*64+j*4+1)<<16) | (message.charCodeAt(i*64+j*4+2)<<8) | (message.charCodeAt(i*64+j*4+3));
+                    M[i][j] = (source.charCodeAt(i*64+j*4)<<24) | (source.charCodeAt(i*64+j*4+1)<<16) | (source.charCodeAt(i*64+j*4+2)<<8) | (source.charCodeAt(i*64+j*4+3));
                 }
             }
             

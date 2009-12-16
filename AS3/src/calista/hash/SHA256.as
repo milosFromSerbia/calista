@@ -55,7 +55,6 @@ package calista.hash
     {
         /**
          * Encrypt the specified text with the SHA-256 algorithm.
-         * 
          */
         public static function encrypt( source:String ):String 
         {
@@ -229,7 +228,7 @@ package calista.hash
         {
             var s:String = "" ;
             var v:int ;
-            for ( var i:int = 7 ;i >= 0 ;i-- ) 
+            for ( var i:int = 7 ; i >= 0 ; i-- ) 
             { 
                 v = ( n >>> (i * 4) ) & 0xF ;
                 s += v.toString(16); 
