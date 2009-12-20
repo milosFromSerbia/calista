@@ -108,7 +108,7 @@ package examples
             zip.addEventListener( IOErrorEvent.IO_ERROR , error    ) ;
             zip.addEventListener( SecurityErrorEvent.SECURITY_ERROR , error ) ;
             
-            zip.request = new URLRequest("library/icons.zip") ;
+            zip.request = new URLRequest("library/icons_basic.zip") ;
             
             console.writeLine("# zip load uri:" + zip.request.url ) ;
             
@@ -129,7 +129,7 @@ package examples
         
         protected function complete( e:Event ):void 
         {
-            console.writeLine( "# complete" ) ;
+            console.writeLine( "# complete.") ;
             done = true ;
         }
         
@@ -140,7 +140,7 @@ package examples
         
         protected function enterFrame( e:Event = null ):void 
         {
-            for( var i:uint ; i < 50 ; i++ ) 
+            for( var i:uint ; i < 100 ; i++ ) 
             {
                 if( zip.numFiles > index ) 
                 {

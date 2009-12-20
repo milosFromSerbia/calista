@@ -436,61 +436,6 @@ package libraries.zip
         ///////////// protected
         
         /**
-         * @private
-         */
-        protected function parseContent( data:IDataInput) :void 
-        {
-            if( _compressionMethod === ZipCompression.DEFLATED && !_encrypted ) 
-            {
-                if( HAS_INFLATE ) 
-                {
-                    // Adobe Air supports inflate decompression. 
-                    // If we got here, this is an Air application and we can decompress without using the Adler32 hack so we just write out the raw deflate compressed file
-                    data.readBytes( _data, 0, _sizeCompressed ) ;
-                } 
-                else if( _hasAdler32 ) 
-                {
-                    // Add zlib header
-                    
-                    // CMF (compression method and info)
-                    
-                    _data.writeByte(0x78) ;
-                    
-                    // FLG (compression level, preset dict, checkbits)
-                    
-                    var flg:uint = (~_deflateSpeedOption << 6) & 0xc0 ;
-                    flg         += 31 - (((0x78 << 8) | flg) % 31);
-                    
-                    _data.writeByte(flg);
-                    
-                    // Add raw deflate-compressed file
-                    
-                    data.readBytes( _data, 2, _sizeCompressed ) ;
-                     
-                    // Add adler32 checksum
-                    
-                    _data.position = _data.length;
-                    _data.writeUnsignedInt( uint(_adler32) ) ;
-                } 
-                else 
-                {
-                    throw new Error("Adler32 checksum not found.");
-                }
-                isCompressed = true;
-            } 
-            else if(_compressionMethod == ZipCompression.NONE) 
-            {
-                data.readBytes( _data, 0, _sizeCompressed ) ;
-                isCompressed = false ;
-            } 
-            else 
-            {
-                throw new Error("Compression method " + _compressionMethod + " is not supported.") ;
-            }
-            _data.position = 0;
-        }
-        
-        /**
          * Compress the zip file.
          * @private
          */
@@ -528,8 +473,57 @@ package libraries.zip
          */
         hack function parse( stream:IDataInput ):Boolean 
         {
-            while (stream.bytesAvailable && parseFunc(stream));
-            return (parseFunc === parseFileIdle);
+            while ( stream.bytesAvailable && parseFunc(stream) )
+            {
+                //
+            }
+            return (parseFunc === parseFileIdle) ;
+        }
+        
+        /**
+         * @private
+         */
+        protected function parseContent( data:IDataInput) :void 
+        {
+            if( _compressionMethod === ZipCompression.DEFLATED && !_encrypted ) 
+            {
+                if( HAS_INFLATE ) 
+                {
+                    // Adobe Air supports inflate decompression. 
+                    // If we got here, this is an Air application and we can decompress without using the Adler32 hack so we just write out the raw deflate compressed file
+                    data.readBytes( _data, 0, _sizeCompressed ) ;
+                } 
+                else if( _hasAdler32 ) 
+                {
+                    // Add zlib header and CMF (compression method and info)
+                    _data.writeByte(0x78) ;
+                    // FLG (compression level, preset dict, checkbits)
+                    var flg:uint = (~_deflateSpeedOption << 6) & 0xc0 ;
+                    flg         += 31 - (((0x78 << 8) | flg) % 31);
+                    _data.writeByte(flg);
+                    // Add raw deflate-compressed file
+                    data.readBytes( _data, 2, _sizeCompressed ) ;
+                    // Add adler32 checksum
+                    _data.position = _data.length;
+                    _data.writeUnsignedInt( uint(_adler32) ) ;
+                } 
+                else 
+                {
+                    data.readBytes( _data , 0, _sizeCompressed); 
+                    // TODO  throw new Error("Adler32 checksum not found.");
+                }
+                isCompressed = true;
+            } 
+            else if(_compressionMethod == ZipCompression.NONE) 
+            {
+                data.readBytes( _data, 0, _sizeCompressed ) ;
+                isCompressed = false ;
+            } 
+            else 
+            {
+                throw new Error("Compression method " + _compressionMethod + " is not supported.") ;
+            }
+            _data.position = 0;
         }
         
         /**
@@ -636,9 +630,13 @@ package libraries.zip
                 {
                     _data.uncompress.apply( _data, ["deflate"] ) ;
                 } 
-                else 
+                else if(_hasAdler32)
                 {
                     _data.uncompress() ;
+                }
+                else
+                {
+                    _data.deflate() ;
                 }
                 _data.position = 0   ;
                 isCompressed = false ;
