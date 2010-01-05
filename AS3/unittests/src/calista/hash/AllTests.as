@@ -50,6 +50,7 @@ package calista.hash
         {
            var suite:TestSuite = new TestSuite( "Test the calista.hash package" );
            suite.addTestSuite( Adler32Test ) ;
+           suite.addTestSuite( BlowfishTest ) ;
            suite.addTestSuite( CRC32Test ) ;
            suite.addTestSuite( MD5Test ) ;
            suite.addTestSuite( SHA1Test ) ;           suite.addTestSuite( SHA256Test ) ;
