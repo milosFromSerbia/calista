@@ -189,7 +189,5 @@ package calista.hash
             }
             return longs ;
         }
-
-
     }
 }
