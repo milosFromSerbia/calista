@@ -36,9 +36,6 @@
 package calista.hash 
 {
     import buRRRn.ASTUce.framework.TestCase;
-
-    import system.hack;
-    use namespace hack ;
     
     public class BlowfishTest extends TestCase 
     {
@@ -59,6 +56,11 @@ package calista.hash
             assertEquals( "09B162A36AF69F66699E5BAE6CF11B3C" , blowfish.encrypt( "hello world" ) ) ;
         }
         
+        public function testEncryptStatic():void
+        {
+            assertEquals( "09B162A36AF69F66699E5BAE6CF11B3C" , Blowfish.encrypt( "hello world" ,"calista" ) ) ;
+        }
+        
         public function testEncryptWithNewKey():void
         {
             var blowfish:Blowfish = new Blowfish("calista") ;
@@ -70,6 +72,11 @@ package calista.hash
         {
             var blowfish:Blowfish = new Blowfish("calista") ;
             assertEquals( "hello world" , blowfish.decrypt( "09B162A36AF69F66699E5BAE6CF11B3C" ) ) ;
+        }
+        
+        public function testDecryptStatic():void
+        {
+            assertEquals( "hello world" , Blowfish.decrypt( "09B162A36AF69F66699E5BAE6CF11B3C" , "calista" ) ) ;
         }
         
         public function testDecryptWithNewKey():void
