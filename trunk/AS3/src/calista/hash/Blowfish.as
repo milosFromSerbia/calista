@@ -35,70 +35,24 @@
 
 package calista.hash 
 {
+    import system.hack;
+
+    import flash.errors.IllegalOperationError;
+    
+    use namespace hack ;
+    
     /**
-     * In progress.... 
+     * Blowfish is a keyed, symmetric block cipher, designed in 1993 by Bruce Schneier and included in a large number of cipher suites and encryption products. 
+     * Blowfish provides a good encryption rate in software and no effective cryptanalysis of it has been found to date. 
      */
     public class Blowfish 
     {
-        
-        
         /**
          * Creates a new Blowfish instance.
          */
-        public function Blowfish( key:String )
+        public function Blowfish( key:String = null )
         {
-            if (key == null || key.length == 0)
-            {
-                // TODO error
-            }
-            var d:int ;
-            var i:int ;
-            var j:int ;
-            p  = [].concat( P  ) ;
-            s0 = [].concat( S0 ) ;
-            s1 = [].concat( S1 ) ;
-            s2 = [].concat( S2 ) ;
-            s3 = [].concat( S3 ) ;
-            _key = ( key.length > 56 ) ? key.substr(0,56) : key ;
-            for( i = 0 ; i<18 ; ++i )
-            {
-                d = (( _key.charCodeAt( j % _key.length ) * 256 + _key.charCodeAt((j+1)%_key.length))*256+ _key.charCodeAt((j+2)%_key.length))*256+_key.charCodeAt((j+3)%_key.length);
-                p[i] = xor( p[i] , d ) ;
-                j = (j+4) % _key.length ;
-            }
-            _key = escape( _key ) ;
-            xl_par = 0x00000000 ;
-            xr_par = 0x00000000 ;
-            for( i = 0 ; i<18 ; i+=2 )
-            {
-                encipher() ;
-                p[i]   = xl_par ;
-                p[i+1] = xr_par ;
-            }
-            for(j=0;j<256;j+=2)
-            {
-                encipher() ;
-                s0[j]   = xl_par ;
-                s0[j+1] = xr_par ;
-            }
-            for(j=0;j<256;j+=2)
-            {
-                encipher() ;
-                s1[j]   = xl_par ;
-                s1[j+1] = xr_par ;
-            }
-            for( j=0 ; j<256 ; j+=2 ) 
-            {
-                encipher() ;
-                s2[j]   = xl_par ;
-                s2[j+1] = xr_par ;
-            }
-            for ( j = 0 ; j<256 ; j+=2 )
-            {
-                encipher() ;
-                s3[j]   = xl_par ;
-                s3[j+1] = xr_par ;
-            }
+            this.key = key ;
         }
         
         public function get key():String
@@ -106,78 +60,159 @@ package calista.hash
             return _key ; 
         }
         
-        public function encrypt( t:String ):String
+        public function set key( value:String ):void
         {
-            var i:int ;
-            t = escape(t) ;
-            for( i=0 ; i < (t.length % 16) ;i++ ) 
+            if ( value && value.length > 0 )
             {
-                t+='0';
+                _key = ( value.length > 56 ) ? value.substr(0,56) : value ;
+                p  = [].concat( P  ) ;
+                s0 = [].concat( S0 ) ;
+                s1 = [].concat( S1 ) ;
+                s2 = [].concat( S2 ) ;
+                s3 = [].concat( S3 ) ;
+                var d:Number ;
+                var i:int = 0 ;
+                var j:int = 0 ;
+                for( i = 0 ; i<18 ; ++i )
+                {
+                    d    = (( _key.charCodeAt( j % _key.length ) * 256 + _key.charCodeAt( (j+1) % _key.length ) ) * 256 + _key.charCodeAt( ( j + 2 ) % _key.length ) ) * 256 + _key.charCodeAt((j+3)%_key.length);
+                    p[i] = xor( p[i] , d ) ;
+                    j    = (j+4) % _key.length ;
+                }
+                _key = hack::escape( _key ) ;
+                xl_par = 0x00000000 ;
+                xr_par = 0x00000000 ;
+                for( i = 0 ; i<18 ; i+=2 )
+                {
+                    hack::encipher() ;
+                    p[i]   = xl_par ;
+                    p[i+1] = xr_par ;
+                }
+                
+                for( j=0 ; j<256 ; j+=2 )
+                {
+                    hack::encipher() ;
+                    s0[j]   = xl_par ;
+                    s0[j+1] = xr_par ;
+                }
+                for( j=0 ; j<256 ; j+=2 )
+                {
+                    hack::encipher() ;
+                    s1[j]   = xl_par ;
+                    s1[j+1] = xr_par ;
+                }
+                for( j=0 ; j<256 ; j+=2 ) 
+                {
+                    hack::encipher() ;
+                    s2[j]   = xl_par ;
+                    s2[j+1] = xr_par ;
+                }
+                for ( j = 0 ; j<256 ; j+=2 )
+                {
+                    hack::encipher() ;
+                    s3[j]   = xl_par ;
+                    s3[j+1] = xr_par ;
+                }
             }
-            var r:String ="";
-            for( i=0 ; i < t.length ; i+=16 )
+            else
             {
-                xr_par = wordunescape( t.substr( i   , 8 ) ) ;
-                xl_par = wordunescape( t.substr( i+8 , 8 ) ) ;
-                encipher();
-                r += wordescape( xr_par ) + wordescape( xl_par ) ;
+                _key = null ;
             }
-            return r;
         }
         
-        public function decrypt( t:String ):String
+        /**
+         * Uses Blowfish algorithm to encrypt a string value using key.
+         * @param source The source to encrypt.
+         * @return The encrypted cypher text as string.
+         */
+        public function encrypt( source:String ):String
+        {
+            if ( _key )
+            {
+                var i:int ;
+                source = hack::escape( source ) ;
+                for( i = 0 ; i < (source.length % 16) ; i++ ) 
+                {
+                    source += "0" ;
+                }
+                var cipher:String = "" ;
+                for( i = 0 ; i < source.length ; i+=16 )
+                {
+                    xr_par = hack::wordunescape( source.substr( i   , 8 ) ) ;
+                    xl_par = hack::wordunescape( source.substr( i+8 , 8 ) ) ;
+                    hack::encipher();
+                    cipher += hack::wordescape( xr_par ) + hack::wordescape( xl_par ) ;
+                }
+                return cipher ;
+            }
+            else
+            {
+                throw new IllegalOperationError("The Blowfish encryption failed, the key not must be null.") ;
+            }
+        }
+        
+        /**
+         * Use Blowfish algorithm to decrypt ciphertext using key.
+         * @param cipher String to be decrypted.
+         * @return The decrypted text.
+         */
+        public function decrypt( cipher:String ):String
         {
             var i:int ;
-            for( i=0; i < t.length%16 ;i++ ) 
+            for( i=0; i < (cipher.length%16) ;i++ ) 
             {
-                t+='0' ;
+                cipher += "0" ;
             }
             var r:String = "" ;
-            for ( i=0 ; i < t.length ; i+=16 )
+            for ( i=0 ; i < cipher.length ; i+=16 )
             {
-                xr_par = wordunescape( t.substr(i,8) );
-                xl_par = wordunescape( t.substr(i+8,8) );
-                decipher();
-                r += wordescape(xr_par) + wordescape(xl_par) ;
+                xr_par = hack::wordunescape( cipher.substr(i,8) );
+                xl_par = hack::wordunescape( cipher.substr(i+8,8) );
+                hack::decipher();
+                r += hack::wordescape(xr_par) + hack::wordescape(xl_par) ;
             }
-            return unescape(r);
+            r = hack::unescape(r) ;
+            r = r.replace( /\0+$/ , "" ) ;
+            return r ;
         };
         
-        public var p:Array ;
-        public var s0:Array ;
-        public var s1:Array ;
-        public var s2:Array ;
-        public var s3:Array ;
-        public var xl_par:int ;
-        public var xr_par:int ;
+        /////////////////////////////////////
         
-        public function encipher():void
+        hack var p:Array ;
+        hack var s0:Array ;
+        hack var s1:Array ;
+        hack var s2:Array ;
+        hack var s3:Array ;
+        hack var xl_par:Number ;
+        hack var xr_par:Number ;
+        
+        hack function encipher():void
         {
-            var xl:int = xl_par ;
-            var xr:int = xr_par ;
+            var xl:Number = xl_par ;
+            var xr:Number = xr_par ;
             xl = xor( xl , p[0] ) ;
-            xr = round( xr,xl, 1 ) ;
-            xl = round( xl,xr, 2 ) ;
-            xr = round( xr,xl, 3 ) ;
-            xl = round( xl,xr, 4 ) ;
-            xr = round( xr,xl, 5 ) ;
-            xl = round( xl,xr, 6 ) ;
-            xr = round( xr,xl, 7 ) ;
-            xl = round( xl,xr, 8 ) ;
-            xr = round( xr,xl, 9 ) ;
-            xl = round( xl,xr,10 ) ;
-            xr = round( xr,xl,11 ) ;
-            xl = round( xl,xr,12 ) ;
-            xr = round( xr,xl,13 ) ;
-            xl = round( xl,xr,14 ) ;
-            xr = round( xr,xl,15 ) ;
-            xl = round( xl,xr,16 ) ;
+            xr = round( xr , xl ,  1 ) ;
+            xl = round( xl , xr ,  2 ) ;
+            xr = round( xr , xl ,  3 ) ;
+            xl = round( xl , xr ,  4 ) ;
+            xr = round( xr , xl ,  5 ) ;
+            xl = round( xl , xr ,  6 ) ;
+            xr = round( xr , xl ,  7 ) ;
+            xl = round( xl , xr ,  8 ) ;
+            xr = round( xr , xl ,  9 ) ;
+            xl = round( xl , xr , 10 ) ;
+            xr = round( xr , xl , 11 ) ;
+            xl = round( xl , xr , 12 ) ;
+            xr = round( xr , xl , 13 ) ;
+            xl = round( xl , xr , 14 ) ;
+            xr = round( xr , xl , 15 ) ;
+            xl = round( xl , xr , 16 ) ;
             xr = xor( xr , p[17] ) ;
             xl_par = xr;
             xr_par = xl;
         }
         
-        public function escape( t:String ):String
+        hack function escape( t:String ):String
         {
             var c:int ;
             var x:int ;
@@ -195,10 +230,10 @@ package calista.hash
             return r;
         }
         
-        public function decipher():void
+        hack function decipher():void
         {
-            var xl:int = xl_par ;
-            var xr:int = xr_par ;
+            var xl:Number = xl_par ;
+            var xr:Number = xr_par ;
             xl = xor(xl,p[17]) ;
             xr = round(xr,xl,16) ;
             xl = round(xl,xr,15) ;
@@ -221,12 +256,12 @@ package calista.hash
             xr_par = xl ;
         };
         
-        public function round( a:int , b:int , n:int ):int
+        hack function round( a:Number , b:Number , n:Number ):Number
         {
             return xor( a , xor( ( ( xor( ( s0[ wordbyte0(b)] + s1[wordbyte1(b)]) , s2[ wordbyte2(b)])) + s3[wordbyte3(b)] ) , p[n] ) ) ;
         }
         
-        public function unescape( t:String ):String
+        hack function unescape( t:String ):String
         {
             var x:int ;
             var y:int ;
@@ -242,10 +277,10 @@ package calista.hash
             return r;
         };
         
-        public function wordescape( w:int ):String
+        hack function wordescape( w:Number ):String
         {
-            var x:int ;
-            var y:int ;
+            var x:Number ;
+            var y:Number ;
             var r:String = "" ;
             var m:Array = 
             [
@@ -265,31 +300,31 @@ package calista.hash
             return r;
         }
         
-        public function wordbyte0( w:Number ):int
+        hack function wordbyte0( w:Number ):Number
         {
             return Math.floor( Math.floor( Math.floor( w / 256 ) / 256 ) / 256 ) % 256 ;
         }
         
-        public function wordbyte1( w:Number ):int
+        hack function wordbyte1( w:Number ):Number
         {
             return Math.floor( Math.floor( w / 256 ) / 256 ) % 256 ;
         }
         
-        public function wordbyte2( w:Number ):int
+        hack function wordbyte2( w:Number ):Number
         {
             return Math.floor( w / 256 ) % 256 ;
         }
         
-        public function wordbyte3( w:Number ):int
+        hack function wordbyte3( w:Number ):Number
         {
             return w % 256 ;
         }
         
-        public function wordunescape( t:String ):int
+        hack function wordunescape( t:String ):Number
         {
             var x:int ;
             var y:int ;
-            var r:int = 0 ;
+            var r:Number = 0 ;
             for( var i:int=6 ; i>=0 ; i-=2 )
             {
                 x = t.charCodeAt(i)  ;
@@ -301,14 +336,14 @@ package calista.hash
             return r ;
         }
         
-        public function xor( w1:int ,w2:int ):int
+        hack function xor( w1:Number , w2:Number ):Number
         {
-            var r:int = w1 ^ w2 ;
-            if ( r < 0 ) 
+            var r:Number = w1 ^ w2 ;
+            if (r<0) 
             {
-                r = 0xFFFFFFFF + 1 + r ;
+                r= 0xffffffff + 1 + r ; 
             }
-            return r ;
+            return r;
         };
         
         private var _key:String ;
@@ -507,6 +542,5 @@ package calista.hash
             0x01c36ae4,0xd6ebe1f9,0x90d4f869,0xa65cdea0,0x3f09252d,0xc208e69f,
             0xb74e6132,0xce77e25b,0x578fdfe3,0x3ac372e6
         ];
-    
     }
 }
