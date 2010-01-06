@@ -36,7 +36,7 @@
 package calista.hash 
 {
     import buRRRn.ASTUce.framework.TestCase;
-    
+
     public class BlowfishTest extends TestCase 
     {
         public function BlowfishTest(name:String = "")
@@ -44,16 +44,55 @@ package calista.hash
             super(name);
         }
         
+        public function testKey():void
+        {
+            var blowfish:Blowfish = new Blowfish("calista") ;
+            assertEquals( "63616C69737461" , blowfish.key ) ;
+        }
+        
         public function testEncrypt():void
         {
             var blowfish:Blowfish = new Blowfish("calista") ;
-            assertEquals( "$,.!%&+!,0$%-',$" , blowfish.encrypt( "hello world" ) ) ; // FIXME
+            var source:String     = "hello world" ;
+            var cipher:String     = blowfish.encrypt( source ) ;
+            
+            // hello world :: 09B162A36AF69F66699E5BAE6CF11B3C
+            
+            assertEquals( "09B162A36AF69F66699E5BAE6CF11B3C" , cipher , "01" ) ; // FIXME
+            //assertEquals( source , blowfish.decrypt( cipher ) , "02" ) ; // FIXME
         }
-        
-        public function testDecrypt():void
+//        
+//        public function testDecrypt():void
+//        {
+//            //var blowfish:Blowfish = new Blowfish("calista") ;
+//            //assertEquals( "hello world" , blowfish.decrypt( "$,.!%&+!,0$%-',$" ) ) ; // FIXME
+//        }
+
+        public function testEscape():void
         {
             var blowfish:Blowfish = new Blowfish("calista") ;
-            assertEquals( "hello world" , blowfish.decrypt( "$,.!%&+!,0$%-',$" ) ) ; // FIXME
+            assertEquals("63616C69737461" , blowfish.escape( "calista" )) ;
         }
+        
+        public function testUnEscape():void
+        {
+            var blowfish:Blowfish = new Blowfish("calista") ;
+            assertEquals( "calista" , blowfish.unescape( "63616C69737461" )) ;
+        }
+        
+        public function testWordescape():void
+        {
+            var blowfish:Blowfish = new Blowfish("calista") ;
+            assertEquals("01000000" , blowfish.wordescape( 1 )) ;
+            assertEquals("0A000000" , blowfish.wordescape( 10 )) ;
+        }
+        
+        public function testWordunescape():void
+        {
+            var blowfish:Blowfish = new Blowfish("calista") ;
+            assertEquals(  1 , blowfish.wordunescape( "01000000") ) ;
+            assertEquals( 10 , blowfish.wordunescape( "0A000000") ) ;
+        }
+
     }
 }

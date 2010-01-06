@@ -40,6 +40,8 @@ package calista.hash
      */
     public class Blowfish 
     {
+        
+        
         /**
          * Creates a new Blowfish instance.
          */
@@ -49,40 +51,41 @@ package calista.hash
             {
                 // TODO error
             }
+            var d:int ;
+            var i:int ;
+            var j:int ;
             p  = [].concat( P  ) ;
             s0 = [].concat( S0 ) ;
             s1 = [].concat( S1 ) ;
             s2 = [].concat( S2 ) ;
             s3 = [].concat( S3 ) ;
-            key = ( key.length > 56 ) ? key.substr(0,56): key ;
-            var d:int ;
-            var i:int ;
-            var j:int ;
+            _key = ( key.length > 56 ) ? key.substr(0,56) : key ;
             for( i = 0 ; i<18 ; ++i )
             {
-                d = (( key.charCodeAt( j % key.length ) * 256 + key.charCodeAt((j+1)%key.length))*256+ key.charCodeAt((j+2)%key.length))*256+key.charCodeAt((j+3)%key.length);
+                d = (( _key.charCodeAt( j % _key.length ) * 256 + _key.charCodeAt((j+1)%_key.length))*256+ _key.charCodeAt((j+2)%_key.length))*256+_key.charCodeAt((j+3)%_key.length);
                 p[i] = xor( p[i] , d ) ;
-                j = (j+4) % key.length ;
+                j = (j+4) % _key.length ;
             }
-            key = escape( key ) ;
+            _key = escape( _key ) ;
             xl_par = 0x00000000 ;
             xr_par = 0x00000000 ;
-            for( i = 0 ; i<18 ;i+=2 )
+            for( i = 0 ; i<18 ; i+=2 )
             {
-                encipher();
+                encipher() ;
                 p[i]   = xl_par ;
                 p[i+1] = xr_par ;
             }
             for(j=0;j<256;j+=2)
             {
-                encipher();
-                s0[j]=xl_par;
-                s0[j+1]=xr_par;
+                encipher() ;
+                s0[j]   = xl_par ;
+                s0[j+1] = xr_par ;
             }
-            for(j=0;j<256;j+=2){
-                encipher();
-                s1[j]=xl_par;
-                s1[j+1]=xr_par;
+            for(j=0;j<256;j+=2)
+            {
+                encipher() ;
+                s1[j]   = xl_par ;
+                s1[j+1] = xr_par ;
             }
             for( j=0 ; j<256 ; j+=2 ) 
             {
@@ -90,32 +93,34 @@ package calista.hash
                 s2[j]   = xl_par ;
                 s2[j+1] = xr_par ;
             }
-            for (j=0;j<256;j+=2)
+            for ( j = 0 ; j<256 ; j+=2 )
             {
                 encipher() ;
                 s3[j]   = xl_par ;
                 s3[j+1] = xr_par ;
             }
-            this.key = key ;
         }
         
-        public var key:String ;
+        public function get key():String
+        {
+            return _key ; 
+        }
         
         public function encrypt( t:String ):String
         {
             var i:int ;
             t = escape(t) ;
-            for( i=0 ; i<t.length%16 ;i++ ) 
+            for( i=0 ; i < (t.length % 16) ;i++ ) 
             {
                 t+='0';
             }
             var r:String ="";
-            for( i=0 ;i<t.length;i+=16)
+            for( i=0 ; i < t.length ; i+=16 )
             {
-                xr_par=wordunescape(t.substr(i,8));
-                xl_par=wordunescape(t.substr(i+8,8));
+                xr_par = wordunescape( t.substr( i   , 8 ) ) ;
+                xl_par = wordunescape( t.substr( i+8 , 8 ) ) ;
                 encipher();
-                r+=wordescape(xr_par)+wordescape(xl_par);
+                r += wordescape( xr_par ) + wordescape( xl_par ) ;
             }
             return r;
         }
@@ -138,52 +143,59 @@ package calista.hash
             return unescape(r);
         };
         
-        protected var p:Array ;
-        protected var s0:Array ;
-        protected var s1:Array ;
-        protected var s2:Array ;
-        protected var s3:Array ;
-        protected var xl_par:int ;
-        protected var xr_par:int ;
+        public var p:Array ;
+        public var s0:Array ;
+        public var s1:Array ;
+        public var s2:Array ;
+        public var s3:Array ;
+        public var xl_par:int ;
+        public var xr_par:int ;
         
-        protected function encipher():void
+        public function encipher():void
         {
             var xl:int = xl_par ;
             var xr:int = xr_par ;
-            xl=xor(xl,p[0]);
-            xr=round(xr,xl,1);xl=round(xl,xr,2);
-            xr=round(xr,xl,3);xl=round(xl,xr,4);
-            xr=round(xr,xl,5);xl=round(xl,xr,6);
-            xr=round(xr,xl,7);xl=round(xl,xr,8);
-            xr=round(xr,xl,9);xl=round(xl,xr,10);
-            xr=round(xr,xl,11);xl=round(xl,xr,12);
-            xr=round(xr,xl,13);xl=round(xl,xr,14);
-            xr=round(xr,xl,15);xl=round(xl,xr,16);
-            xr=xor(xr,p[17]);
-            xl_par=xr;
-            xr_par=xl;
+            xl = xor( xl , p[0] ) ;
+            xr = round( xr,xl, 1 ) ;
+            xl = round( xl,xr, 2 ) ;
+            xr = round( xr,xl, 3 ) ;
+            xl = round( xl,xr, 4 ) ;
+            xr = round( xr,xl, 5 ) ;
+            xl = round( xl,xr, 6 ) ;
+            xr = round( xr,xl, 7 ) ;
+            xl = round( xl,xr, 8 ) ;
+            xr = round( xr,xl, 9 ) ;
+            xl = round( xl,xr,10 ) ;
+            xr = round( xr,xl,11 ) ;
+            xl = round( xl,xr,12 ) ;
+            xr = round( xr,xl,13 ) ;
+            xl = round( xl,xr,14 ) ;
+            xr = round( xr,xl,15 ) ;
+            xl = round( xl,xr,16 ) ;
+            xr = xor( xr , p[17] ) ;
+            xl_par = xr;
+            xr_par = xl;
         }
         
-        protected function escape( t:String ):String
+        public function escape( t:String ):String
         {
             var c:int ;
-            var i:int ;
-            var j:int ;
+            var x:int ;
+            var y:int ;
             var r:String = "" ;
-            var l:int = t.length ;
-            for(var k:int = 0 ; i < l ; i++ )
+            for( var i:int = 0 ; i < t.length ; i++ )
             {
-                c  = t.charCodeAt(k) ;
-                i = Math.floor(c/16) ;
-                j = c%16 ;
-                i += (i<10) ? 48 : 55 ;
-                j += (j<10) ? 48 : 55 ;
-                r += String.fromCharCode( i ) + String.fromCharCode( j ) ;
+                c  = t.charCodeAt( i ) ;
+                x  = Math.floor( c / 16 ) ;
+                y  = c % 16 ;
+                x += (x<10) ? 48 : 55 ;
+                y += (y<10) ? 48 : 55 ;
+                r += String.fromCharCode( x ) + String.fromCharCode( y ) ;
             }
             return r;
         }
         
-        protected function decipher():void
+        public function decipher():void
         {
             var xl:int = xl_par ;
             var xr:int = xr_par ;
@@ -205,34 +217,32 @@ package calista.hash
             xr = round(xr,xl, 2) ;
             xl = round(xl,xr, 1) ;
             xr = xor(xr,p[0]);
-            xl_par=xr;
-            xr_par=xl;
+            xl_par = xr ;
+            xr_par = xl ;
         };
         
-        protected function round( a:int , b:int , n:int ):int
+        public function round( a:int , b:int , n:int ):int
         {
             return xor( a , xor( ( ( xor( ( s0[ wordbyte0(b)] + s1[wordbyte1(b)]) , s2[ wordbyte2(b)])) + s3[wordbyte3(b)] ) , p[n] ) ) ;
         }
         
-        protected function unescape( t:String ):String
+        public function unescape( t:String ):String
         {
-            var i:int ;
             var x:int ;
             var y:int ;
             var r:String = "" ;
-            var l:int = t.length ;
-            for( i=0 ; i<l ; i++ )
+            for( var i:int = 0 ; i < t.length  ; i++ )
             {
-                x = t.charCodeAt(i++) ;
-                y = t.charCodeAt(i) ;
-                x-= (x<58) ? 48 : ( (x>96) ? 87 : 55 ) ;
-                y-= (y<58) ? 48 : ( (y>96) ? 87 : 55 ) ;
-                r += String.fromCharCode( x*16 +y ) ;
+                x  = t.charCodeAt(i++) ;
+                y  = t.charCodeAt(i) ;
+                x -= ( (x<58) ? 48 : ( (x>96) ? 87 : 55 ) ) ;
+                y -= ( (y<58) ? 48 : ( (y>96) ? 87 : 55 ) ) ;
+                r += String.fromCharCode( x*16 + y ) ;
             }
             return r;
         };
         
-        protected function wordescape( w:int ):String
+        public function wordescape( w:int ):String
         {
             var x:int ;
             var y:int ;
@@ -246,19 +256,40 @@ package calista.hash
             ];
             for( var i:int = 3 ; i>=0 ;i-- )
             {
-                x = Math.floor(m[i]/16);
-                y = m[i] % 16 ;
-                x+= (x<10) ? 48 : 55 ;
-                y+= (y<10) ? 48 : 55 ;
+                x  = Math.floor(m[i]/16);
+                y  = m[i] % 16 ;
+                x += (x<10) ? 48 : 55 ;
+                y += (y<10) ? 48 : 55 ;
                 r += String.fromCharCode( x ) + String.fromCharCode( y ) ;
             }
             return r;
         }
-        protected function wordunescape( t:String ):int
+        
+        public function wordbyte0( w:Number ):int
+        {
+            return Math.floor( Math.floor( Math.floor( w / 256 ) / 256 ) / 256 ) % 256 ;
+        }
+        
+        public function wordbyte1( w:Number ):int
+        {
+            return Math.floor( Math.floor( w / 256 ) / 256 ) % 256 ;
+        }
+        
+        public function wordbyte2( w:Number ):int
+        {
+            return Math.floor( w / 256 ) % 256 ;
+        }
+        
+        public function wordbyte3( w:Number ):int
+        {
+            return w % 256 ;
+        }
+        
+        public function wordunescape( t:String ):int
         {
             var x:int ;
             var y:int ;
-            var r:int ;
+            var r:int = 0 ;
             for( var i:int=6 ; i>=0 ; i-=2 )
             {
                 x = t.charCodeAt(i)  ;
@@ -267,48 +298,29 @@ package calista.hash
                 y -= (y<58) ? 48 : 55 ;
                 r = r * 256 + ( x*16 + y ) ;
             }
-            return r;
-        }
-
-        
-        protected function wordbyte0( w:Number ):int
-        {
-            return Math.floor( Math.floor( Math.floor( w / 256 ) / 256 ) / 256 ) % 256 ;
+            return r ;
         }
         
-        protected function wordbyte1( w:Number ):int
-        {
-            return Math.floor( Math.floor( w / 256 ) / 256 ) % 256 ;
-        }
-        
-        protected function wordbyte2( w:Number ):int
-        {
-            return Math.floor( w / 256 ) % 256 ;
-        }
-        
-        protected function wordbyte3( w:Number ):int
-        {
-            return w%256 ;
-        }
-        
-        protected function xor( w1:int ,w2:int ):int
+        public function xor( w1:int ,w2:int ):int
         {
             var r:int = w1 ^ w2 ;
-            if (r<0) 
+            if ( r < 0 ) 
             {
-                r=0xFFFFFFFF + 1 + r ;
+                r = 0xFFFFFFFF + 1 + r ;
             }
             return r ;
         };
         
-        public static const P:Array =
+        private var _key:String ;
+        
+        private static const P:Array =
         [
             0x243f6a88,0x85a308d3,0x13198a2e,0x03707344,0xa4093822,0x299f31d0,
             0x082efa98,0xec4e6c89,0x452821e6,0x38d01377,0xbe5466cf,0x34e90c6c,
             0xc0ac29b7,0xc97c50dd,0x3f84d5b5,0xb5470917,0x9216d5d9,0x8979fb1b
         ];
         
-        public static const S0:Array =
+        private static const S0:Array =
         [
             0xd1310ba6,0x98dfb5ac,0x2ffd72db,0xd01adfb7,0xb8e1afed,0x6a267e96,
             0xba7c9045,0xf12c7f99,0x24a19947,0xb3916cf7,0x0801f2e2,0x858efc16,
@@ -355,7 +367,7 @@ package calista.hash
             0x53b02d5d,0xa99f8fa1,0x08ba4799,0x6e85076a
         ] ;
         
-        public static const S1:Array = 
+        private static const S1:Array = 
         [
             0x4b7a70e9,0xb5b32944,0xdb75092e,0xc4192623,0xad6ea6b0,0x49a7df7d,
             0x9cee60b8,0x8fedb266,0xecaa8c71,0x699a17ff,0x5664526c,0xc2b19ee1,
@@ -401,7 +413,8 @@ package calista.hash
             0x675fda79,0xe3674340,0xc5c43465,0x713e38d8,0x3d28f89e,0xf16dff20,
             0x153e21e7,0x8fb03d4a,0xe6e39f2b,0xdb83adf7
         ];
-        public static const S2:Array = 
+        
+        private static const S2:Array = 
         [
             0xe93d5a68,0x948140f7,0xf64c261c,0x94692934,0x411520f7,0x7602d4f7,
             0xbcf46b2e,0xd4a20068,0xd4082471,0x3320f46a,0x43b7d4b7,0x500061af,
@@ -448,7 +461,7 @@ package calista.hash
             0xd79a3234,0x92638212,0x670efa8e,0x406000e0
         ];
         
-        public static const S3:Array = 
+        private static const S3:Array = 
         [
             0x3a39ce37,0xd3faf5cf,0xabc27737,0x5ac52d1b,0x5cb0679e,0x4fa33742,
             0xd3822740,0x99bc9bbe,0xd5118e9d,0xbf0f7315,0xd62d1c7e,0xc700c47b,
