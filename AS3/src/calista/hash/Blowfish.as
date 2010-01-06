@@ -35,15 +35,18 @@
 
 package calista.hash 
 {
-    import system.hack;
-
     import flash.errors.IllegalOperationError;
-    
-    use namespace hack ;
-    
+
     /**
      * Blowfish is a keyed, symmetric block cipher, designed in 1993 by Bruce Schneier and included in a large number of cipher suites and encryption products. 
      * Blowfish provides a good encryption rate in software and no effective cryptanalysis of it has been found to date. 
+     * <p><b>Example :</b></p>
+     * <pre class="prettyprint">
+     * import calista.hash.Blowfish ;
+     * var blowfish:Blowfish = new Blowfish("calista") ;
+     * trace( blowfish.encrypt( "hello world" ) ) ; // "09B162A36AF69F66699E5BAE6CF11B3C"
+     * trace( blowfish.decrypt( "09B162A36AF69F66699E5BAE6CF11B3C" ) ; // hello world
+     * </pre>
      */
     public class Blowfish 
     {
@@ -55,11 +58,22 @@ package calista.hash
             this.key = key ;
         }
         
+        /**
+         * The blowfish singleton reference.
+         */
+        public static const singleton:Blowfish = new Blowfish() ;
+        
+        /**
+         * The key of the blowfish algorithm.
+         */
         public function get key():String
         {
             return _key ; 
         }
         
+        /**
+         * @private
+         */
         public function set key( value:String ):void
         {
             if ( value && value.length > 0 )
@@ -79,37 +93,37 @@ package calista.hash
                     p[i] = xor( p[i] , d ) ;
                     j    = (j+4) % _key.length ;
                 }
-                _key = hack::escape( _key ) ;
+                _key =escape( _key ) ;
                 xl_par = 0x00000000 ;
                 xr_par = 0x00000000 ;
                 for( i = 0 ; i<18 ; i+=2 )
                 {
-                    hack::encipher() ;
+                   encipher() ;
                     p[i]   = xl_par ;
                     p[i+1] = xr_par ;
                 }
                 
                 for( j=0 ; j<256 ; j+=2 )
                 {
-                    hack::encipher() ;
+                   encipher() ;
                     s0[j]   = xl_par ;
                     s0[j+1] = xr_par ;
                 }
                 for( j=0 ; j<256 ; j+=2 )
                 {
-                    hack::encipher() ;
+                   encipher() ;
                     s1[j]   = xl_par ;
                     s1[j+1] = xr_par ;
                 }
                 for( j=0 ; j<256 ; j+=2 ) 
                 {
-                    hack::encipher() ;
+                   encipher() ;
                     s2[j]   = xl_par ;
                     s2[j+1] = xr_par ;
                 }
                 for ( j = 0 ; j<256 ; j+=2 )
                 {
-                    hack::encipher() ;
+                   encipher() ;
                     s3[j]   = xl_par ;
                     s3[j+1] = xr_par ;
                 }
@@ -122,6 +136,12 @@ package calista.hash
         
         /**
          * Uses Blowfish algorithm to encrypt a string value using key.
+         * <p><b>Example :</b></p>
+         * <pre class="prettyprint">
+         * import calista.hash.Blowfish ;
+         * var blowfish:Blowfish = new Blowfish("calista") ;
+         * trace( blowfish.encrypt( "hello world" ) ) ; // "09B162A36AF69F66699E5BAE6CF11B3C"
+         * </pre>
          * @param source The source to encrypt.
          * @return The encrypted cypher text as string.
          */
@@ -130,7 +150,7 @@ package calista.hash
             if ( _key )
             {
                 var i:int ;
-                source = hack::escape( source ) ;
+                source =escape( source ) ;
                 for( i = 0 ; i < (source.length % 16) ; i++ ) 
                 {
                     source += "0" ;
@@ -138,10 +158,10 @@ package calista.hash
                 var cipher:String = "" ;
                 for( i = 0 ; i < source.length ; i+=16 )
                 {
-                    xr_par = hack::wordunescape( source.substr( i   , 8 ) ) ;
-                    xl_par = hack::wordunescape( source.substr( i+8 , 8 ) ) ;
-                    hack::encipher();
-                    cipher += hack::wordescape( xr_par ) + hack::wordescape( xl_par ) ;
+                    xr_par =wordunescape( source.substr( i   , 8 ) ) ;
+                    xl_par =wordunescape( source.substr( i+8 , 8 ) ) ;
+                   encipher();
+                    cipher +=wordescape( xr_par ) +wordescape( xl_par ) ;
                 }
                 return cipher ;
             }
@@ -152,41 +172,91 @@ package calista.hash
         }
         
         /**
+         * Uses Blowfish algorithm to encrypt a string value using key.
+         * <p><b>Example :</b></p>
+         * <pre class="prettyprint">
+         * import calista.hash.Blowfish ;
+         * trace( Blowfish.encrypt( "hello world" , "calista" ) ) ; // "09B162A36AF69F66699E5BAE6CF11B3C"
+         * </pre>
+         * @param source The source to encrypt.
+         * @param key The key used to encrypt.
+         * @return The encrypted cypher text as string.
+         */
+        public static function encrypt( source:String , key:String ):String
+        {
+            singleton.key = key ;
+            return singleton.encrypt(source) ;
+        }
+        
+        /**
          * Use Blowfish algorithm to decrypt ciphertext using key.
+         * <p><b>Example :</b></p>
+         * <pre class="prettyprint">
+         * import calista.hash.Blowfish ;
+         * var blowfish:Blowfish = new Blowfish("calista") ;
+         * trace( blowfish.decrypt( "09B162A36AF69F66699E5BAE6CF11B3C" ) ; // hello world
+         * </pre>
          * @param cipher String to be decrypted.
+         * @param key The key used to decrypt.
          * @return The decrypted text.
          */
         public function decrypt( cipher:String ):String
         {
-            var i:int ;
-            for( i=0; i < (cipher.length%16) ;i++ ) 
+            if ( _key )
             {
-                cipher += "0" ;
+                var i:int ;
+                for( i=0; i < (cipher.length%16) ;i++ ) 
+                {
+                    cipher += "0" ;
+                }
+                var r:String = "" ;
+                for ( i=0 ; i < cipher.length ; i+=16 )
+                {
+                    xr_par =wordunescape( cipher.substr(i,8) );
+                    xl_par =wordunescape( cipher.substr(i+8,8) );
+                    decipher();
+                    r +=wordescape(xr_par) +wordescape(xl_par) ;
+                }
+                r =unescape(r) ;
+                r = r.replace( /\0+$/ , "" ) ;
+                return r ;
             }
-            var r:String = "" ;
-            for ( i=0 ; i < cipher.length ; i+=16 )
+            else
             {
-                xr_par = hack::wordunescape( cipher.substr(i,8) );
-                xl_par = hack::wordunescape( cipher.substr(i+8,8) );
-                hack::decipher();
-                r += hack::wordescape(xr_par) + hack::wordescape(xl_par) ;
+                throw new IllegalOperationError("The Blowfish encryption failed, the key not must be null.") ;
             }
-            r = hack::unescape(r) ;
-            r = r.replace( /\0+$/ , "" ) ;
-            return r ;
-        };
+        }
+        
+        /**
+         * Use Blowfish algorithm to decrypt ciphertext using key.
+         * <p><b>Example :</b></p>
+         * <pre class="prettyprint">
+         * import calista.hash.Blowfish ;
+         * trace( Blowfish.decrypt( "09B162A36AF69F66699E5BAE6CF11B3C" , "calista" ) ; // hello world
+         * </pre>
+         * @param cipher String to be decrypted.
+         * @return The decrypted text.
+         */
+        public static function decrypt( cipher:String , key:String ):String
+        {
+            singleton.key = key ;
+            return singleton.decrypt( cipher ) ;
+        }
         
         /////////////////////////////////////
         
-        hack var p:Array ;
-        hack var s0:Array ;
-        hack var s1:Array ;
-        hack var s2:Array ;
-        hack var s3:Array ;
-        hack var xl_par:Number ;
-        hack var xr_par:Number ;
+        internal var p:Array ;
+        internal var s0:Array ;
+        internal var s1:Array ;
+        internal var s2:Array ;
+        internal var s3:Array ;
+        internal var xl_par:Number ;
+        internal var xr_par:Number ;
         
-        hack function encipher():void
+        /**
+         * @private
+         */
+        internal function encipher():void
         {
             var xl:Number = xl_par ;
             var xr:Number = xr_par ;
@@ -212,7 +282,10 @@ package calista.hash
             xr_par = xl;
         }
         
-        hack function escape( t:String ):String
+        /**
+         * @private
+         */
+        internal function escape( t:String ):String
         {
             var c:int ;
             var x:int ;
@@ -230,7 +303,10 @@ package calista.hash
             return r;
         }
         
-        hack function decipher():void
+        /**
+         * @private
+         */
+        internal function decipher():void
         {
             var xl:Number = xl_par ;
             var xr:Number = xr_par ;
@@ -256,12 +332,18 @@ package calista.hash
             xr_par = xl ;
         };
         
-        hack function round( a:Number , b:Number , n:Number ):Number
+        /**
+         * @private
+         */
+        internal function round( a:Number , b:Number , n:Number ):Number
         {
             return xor( a , xor( ( ( xor( ( s0[ wordbyte0(b)] + s1[wordbyte1(b)]) , s2[ wordbyte2(b)])) + s3[wordbyte3(b)] ) , p[n] ) ) ;
         }
         
-        hack function unescape( t:String ):String
+        /**
+         * @private
+         */
+        internal function unescape( t:String ):String
         {
             var x:int ;
             var y:int ;
@@ -277,7 +359,10 @@ package calista.hash
             return r;
         };
         
-        hack function wordescape( w:Number ):String
+        /**
+         * @private
+         */
+        internal function wordescape( w:Number ):String
         {
             var x:Number ;
             var y:Number ;
@@ -300,27 +385,42 @@ package calista.hash
             return r;
         }
         
-        hack function wordbyte0( w:Number ):Number
+        /**
+         * @private
+         */
+        internal function wordbyte0( w:Number ):Number
         {
             return Math.floor( Math.floor( Math.floor( w / 256 ) / 256 ) / 256 ) % 256 ;
         }
         
-        hack function wordbyte1( w:Number ):Number
+        /**
+         * @private
+         */
+        internal function wordbyte1( w:Number ):Number
         {
             return Math.floor( Math.floor( w / 256 ) / 256 ) % 256 ;
         }
         
-        hack function wordbyte2( w:Number ):Number
+        /**
+         * @private
+         */
+        internal function wordbyte2( w:Number ):Number
         {
             return Math.floor( w / 256 ) % 256 ;
         }
         
-        hack function wordbyte3( w:Number ):Number
+        /**
+         * @private
+         */
+        internal function wordbyte3( w:Number ):Number
         {
             return w % 256 ;
         }
         
-        hack function wordunescape( t:String ):Number
+        /**
+         * @private
+         */
+        internal function wordunescape( t:String ):Number
         {
             var x:int ;
             var y:int ;
@@ -336,7 +436,10 @@ package calista.hash
             return r ;
         }
         
-        hack function xor( w1:Number , w2:Number ):Number
+        /**
+         * @private
+         */
+        internal function xor( w1:Number , w2:Number ):Number
         {
             var r:Number = w1 ^ w2 ;
             if (r<0) 
@@ -346,8 +449,14 @@ package calista.hash
             return r;
         };
         
+        /**
+         * @private
+         */
         private var _key:String ;
         
+        /**
+         * @private
+         */
         private static const P:Array =
         [
             0x243f6a88,0x85a308d3,0x13198a2e,0x03707344,0xa4093822,0x299f31d0,
@@ -355,6 +464,9 @@ package calista.hash
             0xc0ac29b7,0xc97c50dd,0x3f84d5b5,0xb5470917,0x9216d5d9,0x8979fb1b
         ];
         
+        /**
+         * @private
+         */
         private static const S0:Array =
         [
             0xd1310ba6,0x98dfb5ac,0x2ffd72db,0xd01adfb7,0xb8e1afed,0x6a267e96,
@@ -402,6 +514,9 @@ package calista.hash
             0x53b02d5d,0xa99f8fa1,0x08ba4799,0x6e85076a
         ] ;
         
+        /**
+         * @private
+         */
         private static const S1:Array = 
         [
             0x4b7a70e9,0xb5b32944,0xdb75092e,0xc4192623,0xad6ea6b0,0x49a7df7d,
@@ -449,6 +564,9 @@ package calista.hash
             0x153e21e7,0x8fb03d4a,0xe6e39f2b,0xdb83adf7
         ];
         
+        /**
+         * @private
+         */
         private static const S2:Array = 
         [
             0xe93d5a68,0x948140f7,0xf64c261c,0x94692934,0x411520f7,0x7602d4f7,
@@ -496,6 +614,9 @@ package calista.hash
             0xd79a3234,0x92638212,0x670efa8e,0x406000e0
         ];
         
+        /**
+         * @private
+         */
         private static const S3:Array = 
         [
             0x3a39ce37,0xd3faf5cf,0xabc27737,0x5ac52d1b,0x5cb0679e,0x4fa33742,
