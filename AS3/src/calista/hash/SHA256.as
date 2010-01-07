@@ -43,7 +43,7 @@ package calista.hash
      * <p>See <a href="http://www.movable-type.co.uk/scripts/sha256.html">http://www.movable-type.co.uk/scripts/sha256.html</a></p>
      * <p><b>Example :</b></p>
      * <pre class="prettyprint">
-     * import calista.hash.SHA1 ;
+     * import calista.hash.SHA256 ;
      * 
      * var hash:String = SHA256.encrypt("calista") ;
      * var equal:Boolean = hash == 'c37a4150a942afb4b36dd5c85ac744a16de0891c99d418ae7b5ef528dfcf2e9d' ;
