@@ -55,7 +55,8 @@ package calista.hash
      * 
      * source = rxor.encrypt( cipher , 0x1234 ) ;
      * trace( source ) ; // hello world
-     * </pre> 
+     * </pre>
+     * <p>See more information about XOR encryption : <a href="http://www.acm.org/crossroads/xrds11-3/xorencrypt.html" target="_blank">http://www.acm.org/crossroads/xrds11-3/xorencrypt.html</a></p>
      */
     public class RXOR
     {
