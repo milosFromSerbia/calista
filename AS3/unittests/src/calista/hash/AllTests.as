@@ -37,7 +37,7 @@ package calista.hash
 {
     import buRRRn.ASTUce.framework.ITest;
     import buRRRn.ASTUce.framework.TestSuite;
-    
+
     /**
      * This class launch all tests.
      */
@@ -52,7 +52,7 @@ package calista.hash
            suite.addTestSuite( Adler32Test ) ;
            suite.addTestSuite( BlowfishTest ) ;
            suite.addTestSuite( CRC32Test ) ;
-           suite.addTestSuite( MD5Test ) ;
+           suite.addTestSuite( MD5Test ) ;           suite.addTestSuite( RXORTest ) ;
            suite.addTestSuite( SHA1Test ) ;           suite.addTestSuite( SHA256Test ) ;
            suite.addTestSuite( TEATest ) ;
            return suite;
