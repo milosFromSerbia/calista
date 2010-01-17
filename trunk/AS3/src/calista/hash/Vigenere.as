@@ -35,7 +35,6 @@
 
 package calista.hash 
 {
-    import flash.errors.IllegalOperationError;
     /**
      * The Vigenère cipher is a method of encrypting alphabetic text by using a series of different Caesar ciphers based on the letters of a keyword.
      * It is a simple form of polyalphabetic substitution.
@@ -55,12 +54,6 @@ package calista.hash
         {
             //
         }
-        
-        
-        /**
-         * The Vigenere singleton reference.
-         */
-        public static const singleton:Vigenere = new Vigenere() ;
         
         /**
          * Use Vigenère algorithm to decrypt the specified cipher text.
@@ -134,6 +127,11 @@ package calista.hash
         internal var alphabet:String = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" ;
         
         /**
+         * The Vigenere singleton reference.
+         */
+        internal static const singleton:Vigenere = new Vigenere() ;
+        
+        /**
          * @private
          */
         internal function vigenere( input:String , key:String , forward:Boolean ):String
@@ -158,28 +156,27 @@ package calista.hash
             }
             key = adjustedKey;
             len = key . length;
-            if (len == 0)
+            if (len == 0) // the key not must be null or empty
             {
-                throw IllegalOperationError('The key not must be null or empty.');
                 key = "a" ;
-                len = 1 ;
+                len = 1   ;
             }
             var output:String = "";
-            var input_len:int = input.length ;
+            var inputLen:int = input.length ;
             var keyIndex:int  = 0;
-            var in_tag:Boolean ;
-            for (i = 0; i < input_len; i ++)
+            var inTag:Boolean ;
+            for (i = 0; i < inputLen; i ++)
             {
                 var input_char:String = input.charAt(i);
                 if (input_char == "<")
                 {
-                    in_tag = true;
+                    inTag = true;
                 }
                 else if (input_char == ">")
                 {
-                    in_tag = false;
+                    inTag = false;
                 }
-                if (in_tag)
+                if (inTag)
                 {
                     output += input_char;
                     continue;
