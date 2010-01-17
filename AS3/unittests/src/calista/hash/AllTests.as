@@ -55,6 +55,7 @@ package calista.hash
            suite.addTestSuite( MD5Test ) ;           suite.addTestSuite( RXORTest ) ;
            suite.addTestSuite( SHA1Test ) ;           suite.addTestSuite( SHA256Test ) ;
            suite.addTestSuite( TEATest ) ;
+           suite.addTestSuite( VigenereTest ) ;
            return suite;
         }
     }
