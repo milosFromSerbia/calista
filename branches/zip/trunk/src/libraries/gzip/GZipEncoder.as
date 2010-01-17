@@ -64,49 +64,45 @@ package libraries.gzip
             {
                 throw new ArgumentError("source and output can't be null.");
             }
-            
-            var srcBytes:ByteArray;
+            var bytes:ByteArray;
             var target:File = new File(output.nativePath);
-            
-            var fileTime:Date;
-            
+            var date:Date;
             if (source is File)
             {
-                var srcFile:File = source as File;
-                if (!srcFile.exists || srcFile.isDirectory)
+                var file:File = source as File;
+                if (!file.exists || file.isDirectory)
                 {
-                    throw new ArgumentError("If source is a File instance, it must specify the location of an existing file (not a directory).");
+                    throw new ArgumentError("If 'source' is a File instance, it must specify the location of an existing file (not a directory).");
                 }
                 
                 var stream:FileStream = new FileStream();
                 
-                stream.open(srcFile, FileMode.READ);
+                stream.open(file, FileMode.READ);
                 
-                srcBytes = new ByteArray();
-                stream.readBytes(srcBytes, 0, stream.bytesAvailable);
+                bytes = new ByteArray();
+                stream.readBytes(bytes, 0, stream.bytesAvailable);
                 stream.close();
                 
                 if (target.isDirectory)
                 {
-                    target = target.resolvePath(srcFile.name + ".gz");
+                    target = target.resolvePath(file.name + ".gz");
                 }
-                
-                fileTime = srcFile.modificationDate;
+                date = file.modificationDate ;
             }
             else if (source is ByteArray)
             {
-                srcBytes = source as ByteArray;
+                bytes = source as ByteArray;
                 if (target.isDirectory)
                 {
-                    target = target.resolvePath("output.gz");
+                    target = target.resolvePath("output.gz") ;
                 }
-                fileTime = new Date();
+                date = new Date() ;
             }
             else
             {
-                throw new ArgumentError("source must be a File instance or a ByteArray instance");
+                throw new ArgumentError("The source must be a File instance or a ByteArray instance");
             }
-            var gzipBytes:ByteArray  = _bytesEncoder.compressToByteArray(srcBytes, fileTime);
+            var gzipBytes:ByteArray  = _bytesEncoder.compressToByteArray( bytes , date ) ;
             var outStream:FileStream = new FileStream();
             outStream.open( target , FileMode.WRITE );
             outStream.writeBytes( gzipBytes , 0 , gzipBytes.length ) ;
@@ -217,23 +213,21 @@ package libraries.gzip
          * @throws ArgumentError If the <code>source</code> argument is null; refers to a directory; or refers to a file that doesn't exist.
          * @throws IllegalOperationError If the specified file is not a GZip format file.
          */
-        public function parseGZIPFile(source:File):GZipFile
+        public function parseGZIPFile( source:File ):GZipFile
         {
-            // throws errors if source isn't valid
-            checkSrcFile(source);
+            _checkFile( source ) ;
             
-            var srcFile:File = new File(source.nativePath);
-            
+            var file:File         = new File(source.nativePath);
             var stream:FileStream = new FileStream();
             
-            stream.open(srcFile, FileMode.READ);
+            stream.open( file , FileMode.READ ) ;
             
-            var srcBytes:ByteArray = new ByteArray();
+            var bytes:ByteArray = new ByteArray();
             
-            stream.readBytes(srcBytes, 0, stream.bytesAvailable);
-            stream.close();
+            stream.readBytes( bytes , 0 , stream.bytesAvailable ) ;
+            stream.close() ;
             
-            return parseGZIPData(srcBytes, srcFile.name);
+            return parseGZIPData( bytes, file.name) ;
         }
         
         /**
@@ -259,7 +253,7 @@ package libraries.gzip
         /**
          * @private
          */
-        private function checkSrcFile( source:File ):void
+        private function _checkFile( source:File ):void
         {
             if (source == null)
             {
