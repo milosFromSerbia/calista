@@ -172,23 +172,6 @@ package calista.hash
         }
         
         /**
-         * Uses Blowfish algorithm to encrypt a string value using key.
-         * <p><b>Example :</b></p>
-         * <pre class="prettyprint">
-         * import calista.hash.Blowfish ;
-         * trace( Blowfish.encrypt( "hello world" , "calista" ) ) ; // "09B162A36AF69F66699E5BAE6CF11B3C"
-         * </pre>
-         * @param source The source to encrypt.
-         * @param key The key used to encrypt.
-         * @return The encrypted cypher text as string.
-         */
-        public static function encrypt( source:String , key:String ):String
-        {
-            singleton.key = key ;
-            return singleton.encrypt(source) ;
-        }
-        
-        /**
          * Use Blowfish algorithm to decrypt ciphertext using key.
          * <p><b>Example :</b></p>
          * <pre class="prettyprint">
@@ -225,6 +208,23 @@ package calista.hash
             {
                 throw new IllegalOperationError("The Blowfish encryption failed, the key not must be null.") ;
             }
+        }
+        
+        /**
+         * Uses Blowfish algorithm to encrypt a string value using key.
+         * <p><b>Example :</b></p>
+         * <pre class="prettyprint">
+         * import calista.hash.Blowfish ;
+         * trace( Blowfish.encrypt( "hello world" , "calista" ) ) ; // "09B162A36AF69F66699E5BAE6CF11B3C"
+         * </pre>
+         * @param source The source to encrypt.
+         * @param key The key used to encrypt.
+         * @return The encrypted cypher text as string.
+         */
+        public static function encrypt( source:String , key:String ):String
+        {
+            singleton.key = key ;
+            return singleton.encrypt(source) ;
         }
         
         /**
