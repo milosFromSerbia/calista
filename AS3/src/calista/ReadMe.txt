@@ -1,4 +1,4 @@
-CalistA AS3 - version 1.0.0.35
+CalistA AS3 - version 1.0.0.37
  
    CalistA is a little cryptography library written in ActionScript include in the VEGAS framework.
  
