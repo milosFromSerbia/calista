@@ -171,7 +171,7 @@ package calista.hash
             {
                 a[i] = String.fromCharCode( longs[i] & 0xFF , longs[i]>>>8 & 0xFF , longs[i] >>> 16 & 0xFF, longs[i] >>> 24 & 0xFF ) ;
             }
-            return a.join('');  // use Array.join() rather than repeated string appends for efficiency in IE
+            return a.join('') ;
         }
         
         /**
@@ -182,7 +182,7 @@ package calista.hash
         {  
             var i:int ;
             var l:int = Math.ceil( s.length / 4 ) ;
-            var longs:Array = new Array( l ) ; // 
+            var longs:Array = new Array( l ) ;
             for ( i = 0 ; i < l ; i++ ) 
             {
                 longs[i] = s.charCodeAt(i*4) + (s.charCodeAt(i*4+1)<<8) + (s.charCodeAt(i*4+2)<<16) + (s.charCodeAt(i*4+3)<<24);
