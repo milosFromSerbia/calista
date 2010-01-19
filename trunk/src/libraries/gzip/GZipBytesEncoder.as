@@ -63,18 +63,21 @@ package libraries.gzip
             }
             var position:uint       = source.position ;
             var outStream:ByteArray = new ByteArray();
-            var srcBytes:ByteArray  = new ByteArray();
+            var bytes:ByteArray  = new ByteArray();
             
-            srcBytes.writeBytes(source);
+            bytes.writeBytes(source);
             
             // For details of gzip format, see IETF RFC 1952:
             // http://www.ietf.org/rfc/rfc1952
             
             // gzip is little-endian
+            
             outStream.endian = Endian.LITTLE_ENDIAN;
             
             // 1 byte ID1 -- should be 31/0x1f
+            
             var id1:uint = 31;
+            
             outStream.writeByte(id1);
             
             // 1 byte ID2 -- should be 139/0x8b
@@ -90,14 +93,42 @@ package libraries.gzip
             outStream.writeByte(flags);
             
             // 4 bytes MTIME (Modification Time in Unix epoch format; 0 means no time stamp is available)
-            var mtime:uint = (modificationDate == null) ? 0 : modificationDate.time ;
-            outStream.writeUnsignedInt(mtime);
+            
+            var mtime:uint = modificationDate ? modificationDate.time : 0 ;
+            
+            outStream.writeUnsignedInt( mtime ) ;
             
             // 1 byte XFL (flags used by specific compression methods)
+            
             var xfl:uint = parseInt("00000100", 2);
+            
             outStream.writeByte(xfl);
             
-            // 1 byte OS
+            /* 1 byte OS
+            
+            This identifies the type of file system on which compression
+            took place.  This may be useful in determining end-of-line
+            convention for text files.  The currently defined values are
+            as follows:
+            
+                 0 - FAT filesystem (MS-DOS, OS/2, NT/Win32)
+                 1 - Amiga
+                 2 - VMS (or OpenVMS)
+                 3 - Unix
+                 4 - VM/CMS
+                 5 - Atari TOS
+                 6 - HPFS filesystem (OS/2, NT)
+                 7 - Macintosh
+                 8 - Z-System
+                 9 - CP/M
+                10 - TOPS-20
+                11 - NTFS filesystem (NT)
+                12 - QDOS
+                13 - Acorn RISCOS
+               255 - unknown
+            
+            */
+            
             var os:uint;
             if ( Capabilities.os.indexOf("Windows") >= 0)
             {
@@ -111,21 +142,29 @@ package libraries.gzip
             {
                 os = 3 ; // Unix
             }
-            outStream.writeByte(os) ;
+            
+            outStream.writeByte( os ) ;
             
             // calculate crc32 and filesize before compressing data
-            var crc32:uint = CRC32.checkSum(srcBytes);
             
-            var isize:uint = srcBytes.length % Math.pow(2, 32);
+            var crc32:uint = CRC32.checkSum( bytes );
+            
+            // This contains the size of the original (uncompressed) input data modulo 2^32.
+            
+            var isize:uint = bytes.length % Math.pow(2, 32);
             
             // Actual compressed data (up to end - 8 bytes)
-            srcBytes.deflate();
-            outStream.writeBytes(srcBytes, 0, srcBytes.length);
+            
+            bytes.deflate();
+            
+            outStream.writeBytes(bytes, 0, bytes.length);
            
             // 4 bytes CRC32
+            
             outStream.writeUnsignedInt(crc32);
             
             // 4 bytes ISIZE (input size -- size of the original input data modulo 2^32)
+            
             outStream.writeUnsignedInt(isize);
             
             source.position = position ;
@@ -172,50 +211,60 @@ package libraries.gzip
         {
             if (source == null)
             {
-                throw new ArgumentError("GZipBytesEncoder.parseGZIPData failed, the source ByteArray can't be null.");
+                throw new ArgumentError("GZip parsing failed, the source ByteArray can't be null.");
             }
             
             // gzip is little-endian
+            
             source.endian = Endian.LITTLE_ENDIAN;
             
             // 1 byte ID1 -- should be 31/0x1f or else throw an error
+            
             var id1:uint = source.readUnsignedByte();
-            if (id1 != 0x1f)
+            if ( id1 != 0x1F )
             {
-                throw new IllegalOperationError("GZipBytesEncoder.parseGZIPData failed, the specified data is not in GZIP file format structure.");
+                throw new IllegalOperationError("GZip parsing failed, the specified data is not in GZip file format structure.");
             }
            
             // 1 byte ID2 -- should be 139/0x8b or else throw an error
+            
             var id2:uint = source.readUnsignedByte();
-            if (id2 != 0x8b)
+            if ( id2 != 0x8B )
             {
-                    throw new IllegalOperationError("GZipBytesEncoder.parseGZIPData failed, the specified data is not in GZIP file format structure.");
+                throw new IllegalOperationError("GZip parsing failed, the specified data is not in GZip file format structure.");
             }
             
             // 1 byte CM -- should be 8 for DEFLATE or else throw an error
+            
             var cm:uint = source.readUnsignedByte();
             if (cm != 8)
             {
-                throw new IllegalOperationError("GZipBytesEncoder.parseGZIPData failed, the specified data is not in GZIP file format structure.");
+                throw new IllegalOperationError("GZip parsing failed, the specified data is not in GZip file format structure.");
             }
             
             // 1 byte FLaGs
+            
             var flags:int = source.readByte();
             
             // ftext: the file is probably ASCII text
+            
             var hasFtext:Boolean = ((flags >> 7) & 1) == 1 ;
             
             // fhcrc: a CRC16 for the gzip header is present
+            
             var hasFhcrc:Boolean = ((flags >> 6) & 1) == 1 ;
             
             // fextra: option extra fields are present
+            
             var hasFextra:Boolean = ((flags >> 5) & 1) == 1 ;
             
             // fname: an original file name is present, terminated by a zero byte
+            
             var hasFname:Boolean = ((flags >> 4) & 1) == 1 ;
             
             // fcomment: a zero-terminated file comment (intended for human consumption) is present
-            var hasFcomment:Boolean = ((flags >> 3) & 1) == 1 ;
+            
+            var hasComment:Boolean = ((flags >> 3) & 1) == 1 ;
             
             // must throw an error if any of the remaining bits are non-zero
             
@@ -227,7 +276,7 @@ package libraries.gzip
             
             if (flagsError)
             {
-                throw new IllegalOperationError("GZipBytesEncoder.parseGZIPData failed, the specified data is not in GZip file format structure.") ;
+                throw new IllegalOperationError("GZip parsing failed, the specified data is not in GZip file format structure.") ;
             }
             
             // 4 bytes MTIME (Modification Time in Unix epoch format; 0 means no time stamp is available)
@@ -261,8 +310,8 @@ package libraries.gzip
             }
             
             // (if FLG.FCOMMENT is set) file comment, zero terminated
-            var fcomment:String ;
-            if  (hasFcomment )
+            var comment:String ;
+            if  ( hasComment )
             {
                 var fcommentBytes:ByteArray = new ByteArray();
                 while (source.readUnsignedByte() != 0)
@@ -272,7 +321,7 @@ package libraries.gzip
                     fcommentBytes.writeByte(source.readByte()) ;
                 }
                 fcommentBytes.position = 0 ;
-                fcomment = fcommentBytes.readUTFBytes(fcommentBytes.length) ;
+                comment = fcommentBytes.readUTFBytes(fcommentBytes.length) ;
             }
             
             // (if FLG.FHCRC is set) 2 bytes CRC16
@@ -286,14 +335,16 @@ package libraries.gzip
             var data:ByteArray = new ByteArray() ;
             
             source.readBytes(data, 0, dataSize) ;
-           
+            
             // 4 bytes CRC32
+            
             var crc32:uint = source.readUnsignedInt() ;
-           
-            // 4 bytes ISIZE (input size -- size of the original input data modulo 2^32)
+            
+            // 4 bytes ISIZE (input size : size of the original input data modulo 2^32)
+            
             var isize:uint = source.readUnsignedInt() ;
-           
-            return new GZipFile(data, isize, new Date(mtime), name, filename, fcomment);
+            
+            return new GZipFile(data, isize, new Date(mtime), name, filename, comment );
         }
     }
 }
