@@ -38,6 +38,7 @@ package calista.hash
 
     /**
      * Encrypt a string with the MD5 algorithm.
+     * <pMD5 Message Digest Algorithm, as defined in RFC 1321.</p>
      * <p><b>Example :</b></p>
      * <pre class="prettyprint">
      * import calista.hash.MD5 ;
@@ -48,13 +49,7 @@ package calista.hash
      * trace("'calista' MD5 result : " + hash + " : " + equal ) ;
      * 
      * // 'calista' MD5 result : 93fc1e28bc17af6420552b746af10f4f : true
-     * 
      * </pre>
-     * <p>Original Javascript implementation :</p>
-     * RSA Data Security, Inc. MD5 Message Digest Algorithm, as defined in RFC 1321.
-     * Version 2.1 Copyright Paul Johnston 1999 - 2002
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * See http://pajhome.org.uk/crypt/md5 for more info.
      */
     public class MD5 
     {
@@ -79,7 +74,7 @@ package calista.hash
         /**
          * @private
          */
-        private static function bit_rol(num:Number, cnt:Number):Number 
+        private static function bit_rol( num:int , cnt:int ):Number 
         {
             return (num << cnt) | (num >>> (32-cnt));
         }
@@ -87,7 +82,7 @@ package calista.hash
         /**
          * @private
          */
-        private static function cmn(q:Number, a:Number, b:Number, x:Number, s:Number, t:Number):Number 
+        private static function cmn(q:int, a:int, b:int, x:int, s:int, t:int):Number 
         {
             return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b);
         }
@@ -95,21 +90,24 @@ package calista.hash
         /**
          * @private
          */    
-        private static function hash(x:Array, len:Number):Array 
+        private static function hash(x:Array, len:int):Array 
         {
             x[len >> 5] |= 0x80 << ((len)%32) ;
             x[(((len+64) >>> 9) << 4)+14] = len ;
-            var a:Number = 1732584193  ;
-            var b:Number = -271733879  ;
-            var c:Number = -1732584194 ;
-            var d:Number = 271733878   ;
-            for (var i:Number = 0; i<x.length; i += 16) 
+            var olda:int ;
+            var oldb:int ;
+            var oldc:int ;
+            var oldd:int ;
+            var a:int = 1732584193  ;
+            var b:int = -271733879  ;
+            var c:int = -1732584194 ;
+            var d:int = 271733878   ;
+            for (var i:int = 0; i < x.length ; i += 16) 
             {
-                var olda:Number = a ;
-                var oldb:Number = b ;
-                var oldc:Number = c ;
-                var oldd:Number = d ;
-                
+                olda = a ;
+                oldb = b ;
+                oldc = c ;
+                oldd = d ;
                 a = ff(a, b, c, d, x[i+0], 7, -680876936);
                 d = ff(d, a, b, c, x[i+1], 12, -389564586);
                 c = ff(c, d, a, b, x[i+2], 17, 606105819);
@@ -217,8 +215,8 @@ package calista.hash
          */
         private static function safe_add(x:Number, y:Number):Number 
         {
-            var lsw:Number = (x & 0xFFFF)+(y & 0xFFFF);
-            var msw:Number = (x >> 16)+(y >> 16)+(lsw >> 16);
+            var lsw:int = (x & 0xFFFF)+(y & 0xFFFF);
+            var msw:int = (x >> 16)+(y >> 16)+(lsw >> 16);
             return (msw << 16) | (lsw & 0xFFFF);
         }
         
@@ -229,9 +227,9 @@ package calista.hash
         {
             str = new String(str) ;
             var bin:Array = new Array();
-            var mask:Number = (1 << 8)-1;
-            var size:Number = str.length * 8 ;
-            for (var i:Number = 0 ; i<size ; i += 8 ) 
+            var mask:int = (1 << 8)-1;
+            var size:int = str.length * 8 ;
+            for (var i:int = 0 ; i<size ; i += 8 ) 
             {
                 bin[i >> 5] |= (str.charCodeAt(i/8) & mask) << (i%32);
             }
@@ -245,8 +243,8 @@ package calista.hash
         {
             var str:String = "" ;
             var tab:String = new String("0123456789abcdef");
-            var size:Number = binarray.length * 4 ;
-            for (var i:Number = 0; i<size; i++) 
+            var size:int = binarray.length * 4 ;
+            for (var i:int = 0; i<size; i++) 
             {
                 str += tab.charAt((binarray[i >> 2] >> ((i%4)*8+4)) & 0xF) + tab.charAt((binarray[i >> 2] >> ((i%4)*8)) & 0xF);
             }
