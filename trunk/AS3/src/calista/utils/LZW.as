@@ -35,6 +35,8 @@
 
 package calista.utils
 {
+    import flash.utils.Dictionary;
+
     /**
      * Compresses and decompresses text with the LZW algorithm.
      */
@@ -56,22 +58,33 @@ package calista.utils
         {
             var i:int    ;
             var size:int ;
+            
             var xstr:String;
+            
             var chars:int = 256;
-            var dict:Array = new Array();
-            for ( i = 0 ; i<chars ; i++ ) 
+            
+            var dict:Dictionary = new Dictionary();
+            
+            for ( i = 0 ; i < chars ; i++ ) 
             {
                 dict[String(i)] = i;
             }
+            
             var current:String ;
+            
             var result:String = "";
+            
             var splitted:Array = source.split("");
-            var buffer:Array = [] ;
+            
+            var buffer:Vector.<Number> = new Vector.<Number>() ;
+            
             size = splitted.length ;
+            
             for ( i = 0 ; i<=size ; i++) 
             {
                 current = new String(splitted[i]) ;
                 xstr = (buffer.length == 0) ? String(current.charCodeAt(0)) : ( buffer.join("-") + "-" + String(current.charCodeAt(0) ) ) ;
+                
                 if (dict[xstr] !== undefined)
                 {
                     buffer.push(current.charCodeAt(0));
@@ -79,9 +92,12 @@ package calista.utils
                 else 
                 {
                     result += String.fromCharCode(dict[buffer.join("-")]);
+                    
                     dict[xstr] = chars;
+                    
                     chars++;
-                    buffer = new Array();
+                    
+                    buffer = new Vector.<Number>() ;
                     buffer.push(current.charCodeAt(0));
                 }
             }
@@ -108,6 +124,7 @@ package calista.utils
             var i:int ;
             var chars:int = 256;
             var dict:Array = [] ;
+            
             for (i = 0; i<chars; i++) 
             {
                 dict[i] = String.fromCharCode(i);
