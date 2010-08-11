@@ -210,7 +210,10 @@ package libraries.zip
          */
         public function serialize( stream:IDataOutput, includeAdler32:Boolean = false, centralDir:Boolean = false, centralDirOffset:uint = 0):uint 
         {
-            if(stream == null) { return 0; }
+            if( stream == null ) 
+            { 
+                return 0; 
+            }
             if(centralDir) 
             {
                 /////////// Write central directory file header signature
