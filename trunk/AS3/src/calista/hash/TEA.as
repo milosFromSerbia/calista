@@ -125,7 +125,8 @@ package calista.hash
             }
             
             var v:Array = stringToLongs( Base64.decode( cipher ) ) ;
-            var k:Array = stringToLongs( key.slice(0,16) ); 
+            var k:Array = stringToLongs( key.slice(0,16) );
+            
             var n:int   = v.length ;
             
             ////////// TEA
@@ -155,7 +156,9 @@ package calista.hash
             //////////
             
             var source:String = longsToString( v ) ;
+            
             source = source.replace( /\0+$/ , "" ) ; // strip trailing null chars resulting from filling 4-char blocks
+            
             return source ;
         }
         
