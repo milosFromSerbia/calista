@@ -35,13 +35,14 @@
 
 package examples 
 {
-	import graphics.display.ByteArrays;
     import calista.utils.Base64;
-    
+
+    import system.ByteArrays;
+
     import flash.display.Sprite;
     import flash.utils.ByteArray;
     import flash.utils.getTimer;
-    
+
     public class Base64Example extends Sprite 
     {
         public function Base64Example()

@@ -36,11 +36,11 @@
 package calista.utils
 {
     import buRRRn.ASTUce.framework.TestCase;
-    
-    import graphics.display.ByteArrays;
-    
+
+    import system.ByteArrays;
+
     import flash.utils.ByteArray;
-    
+
     /**
      * This class test the Base64 class.
      */
