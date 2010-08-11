@@ -28,9 +28,9 @@
     <output>../../libs/calista.swc</output>
     
     <metadata>
-        <title>The AS3 Calista framework - version 1.0.0.39</title>
-        <description>All class of the CALISTA library</description>
-        <publisher>http://www.ekameleon.net</publisher>
+        <title>The Calista AS3 framework</title>
+        <description>Cryptography Algorithm Library</description>
+        <publisher>http://code.google.com/p/calista/</publisher>
         <creator>Marc ALCARAZ (aka eKameleon)</creator>
         <language>EN</language>
     </metadata>
