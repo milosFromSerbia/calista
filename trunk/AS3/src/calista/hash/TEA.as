@@ -38,7 +38,7 @@ package calista.hash
     import calista.utils.Base64;
     
     /**
-     * Wheeler & Needham’s Tiny Encryption Algorithm is a simple but powerful encryption algorithm (based on a ‘Feistel cipher’).
+     * Wheeler and Needham’s Tiny Encryption Algorithm is a simple but powerful encryption algorithm (based on a ‘Feistel cipher’).
      * <p><b>Example :</b></p>
      * <pre class="prettyprint">
      * import calista.hash.TEA ;
@@ -54,10 +54,10 @@ package calista.hash
      * </pre>
      * <p><b>Original implementation :</b></p>
      * <p>Chris Veness, Movable Type Ltd: www.movable-type.co.uk</p>
-     * <p>Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab</p>
-     * See <a href="http://www.movable-type.co.uk/scripts/tea-block.html">Tiny Encryption Algorithm</a>
-     * @see calista.utils.Base64
-     * @since FlashPlayer 10 & > (use the Vector class)
+     * <p>Algorithm: David Wheeler and Roger Needham, Cambridge University Computer Lab</p>
+     * <p>See <a href="http://www.movable-type.co.uk/scripts/tea-block.html">Tiny Encryption Algorithm</a></p>
+     * @see calista.utils#Base64
+     * @since FlashPlayer 10
      */
     public class TEA 
     {
