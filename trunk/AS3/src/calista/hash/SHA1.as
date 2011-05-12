@@ -37,15 +37,15 @@ package calista.hash
 {
     /**
      * SHA-1 is one of the most secure hash algorithms. 
-     * A hash is not ‘encryption’ – it cannot be decrypted back to the original text (it is a ‘one-way’ cryptographic function, and is a fixed size for any size of source text).
+     * <p>A hash is not ‘encryption’ – it cannot be decrypted back to the original text (it is a ‘one-way’ cryptographic function, and is a fixed size for any size of source text).
      * This makes it suitable when it is appropriate to compare ‘hashed’ versions of texts, as opposed to decrypting the text to obtain the original version. Such applications include stored passwords, challenge handshake authentication, and digital signatures.
-     * Read the good definition of this algorithm in Wikipedia : http://en.wikipedia.org/wiki/SHA-1
-     * This implementation is a ActionScript version of the SHA-1 Cryptographic Hash Algorithm find in the web site : http://www.movable-type.co.uk/
+     * Read the good definition of this algorithm in Wikipedia : <a href="http://en.wikipedia.org/wiki/SHA-1">http://en.wikipedia.org/wiki/SHA-1</a></p>
+     * <p>This implementation is a ActionScript version of the SHA-1 Cryptographic Hash Algorithm find in the web site : http://www.movable-type.co.uk/</p>
      * <p><b>Example :</b></p>
      * <pre class="prettyprint">
      * import calista.hash.SHA1 ;
      * 
-     * var hash:String = SHA1.encrypt("hello world") ;
+     * var hash:String   = SHA1.encrypt("hello world") ;
      * var equal:Boolean = hash == '2aae6c35c94fcfb415dbe95f408b9ce91ee846ed' ;
      * 
      * trace("'hello world' SHA1 result : " + hash + " : " + equal ) ;
@@ -55,7 +55,7 @@ package calista.hash
      * </pre>
      * <p>Original Javascript implementation :</p>
      * <p>Chris Veness, Movable Type Ltd: www.movable-type.co.uk</p>
-     * <p>Algorithm: David Wheeler & Roger Needham, Cambridge University Computer Lab</p>
+     * <p>Algorithm: David Wheeler and Roger Needham, Cambridge University Computer Lab</p>
      * <p>See <a href="http://www.movable-type.co.uk/scripts/sha1.html">SHA-1 cryptographic hash function</a></p>
      */
     public class SHA1 
