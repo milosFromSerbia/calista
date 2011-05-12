@@ -38,7 +38,7 @@ package calista.hash
 
     /**
      * Encrypt a string with the MD5 algorithm.
-     * <pMD5 Message Digest Algorithm, as defined in RFC 1321.</p>
+     * <p>MD5 Message Digest Algorithm, as defined in RFC 1321.</p>
      * <p><b>Example :</b></p>
      * <pre class="prettyprint">
      * import calista.hash.MD5 ;
